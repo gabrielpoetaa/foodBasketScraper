@@ -15,14 +15,12 @@ let randomNumber = Math.floor(Math.random() * 100);
 const ipAdresses = [];
 const portNumbers = [];
 
-
-
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 // randomInterval function
 function randomSecond() {
   // min and max included
-  return Math.floor(Math.random() * (60000 - 1000 + 1) + 1000);
+  return Math.floor(Math.random() * (60000 - 5000 + 1) + 5000);
 }
 randomSecond();
 
@@ -55,7 +53,6 @@ const getProxies = async () => {
 };
 const proxyServer = await getProxies();
 
-
 //Database
 mongoose.connect("mongodb://localhost:27017/webScraping");
 
@@ -74,12 +71,12 @@ const refrigeratedFoodSection = mongoose.model(
   "refrigeratedFoodSection",
   webScrapingDBSchema
 );
-const meatDepartment = mongoose.model(
-  "meatDepartment", 
-  webScrapingDBSchema
-  );
+const meatDepartment = mongoose.model("meatDepartment", webScrapingDBSchema);
+const produceDepartment = mongoose.model("produceDepartment", webScrapingDBSchema);
+
 // Date
 const date = new Date().toLocaleString().split(",")[0];
+
 // scrapeTimer function
 function scrapeTimer() {
   const scrapeClock = new Date();
@@ -90,34 +87,37 @@ function scrapeTimer() {
 
   return scrapeTimer;
 }
+
 // Console.log proxy being used
 let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
-scrapeCheese()
-  .then(scrapeCheeseBlock)
-  .then(mediumCheeseSlices)
-  .then(scrapeYogurt)
-  .then(scrapeEggs)
-  .then(scrapeMargarine)
+// scrapeCheese()
+carrots()
+  // .then(scrapeCheeseBlock)
+  // .then(mediumCheeseSlices)
+  // .then(scrapeYogurt)
+  // .then(scrapeEggs)
+  // .then(scrapeMargarine)
+  // // .then(function firstBreak() {
+  // //   console.log("Finishing Refrigerated Food scraping");
+  // //   console.log("Starting Meat Department scraping")
+  // // })
+  // .then(chickenDrumstrick)
+  // .then(beefStirFry)
+  // .then(outsideRoundSteak)
+  // .then(leanGroundBeef)
+  // .then(porkCenterChop)
+  // .then(blackForestHam)
   // .then(function firstBreak() {
-  //   console.log("Finishing Refrigerated Food scraping");
-  //   console.log("Starting Meat Department scraping")
+  //   console.log("Finishing Meat Department scraping");
+  //   console.log("Starting Produce Department scraping")
   // })
-  .then(chickenDrumstrick)
-  .then(beefStirFry)
-  .then(outsideRoundSteak)
-  .then(leanGroundBeef)
-  .then(porkCenterChop)
-  .then(blackForestHam)
-  .then(function firstBreak() {
-    console.log("Finishing Meat Department scraping");
-    console.log("Starting Produce Department scraping")
-  })
+  // .then(cantaloupe)
+  // .then(sweetPotato);
+  // .then(carrots)
 
-  
-
-/* Scrape Regrigerated Food */
+/* Regrigerated Food */
 
 function scrapeCheese() {
   return new Promise(function (resolve, reject) {
@@ -567,7 +567,7 @@ function scrapeMargarine() {
   });
 }
 
-/* Scrape Meat Department */
+/* Meat Department */
 
 function chickenDrumstrick() {
   return new Promise(function (resolve, reject) {
@@ -632,9 +632,7 @@ function chickenDrumstrick() {
         browser.close();
       }
       resolve(
-        scrapeUrl(
-          "https://www.nofrills.ca/chicken-drumstick/p/20654051_KG"
-        )
+        scrapeUrl("https://www.nofrills.ca/chicken-drumstick/p/20654051_KG")
       );
     }, randomSecond);
   });
@@ -842,9 +840,7 @@ function leanGroundBeef() {
         browser.close();
       }
       resolve(
-        scrapeUrl(
-          "https://www.nofrills.ca/lean-ground-beef/p/21125124_EA"
-        )
+        scrapeUrl("https://www.nofrills.ca/lean-ground-beef/p/21125124_EA")
       );
     }, randomSecond);
   });
@@ -982,15 +978,214 @@ function blackForestHam() {
         browser.close();
       }
       resolve(
-        scrapeUrl(
-          "https://www.nofrills.ca/black-forest-ham/p/20817362_EA"
-        )
+        scrapeUrl("https://www.nofrills.ca/black-forest-ham/p/20817362_EA")
       );
     }, randomSecond);
   });
 }
 
+/* Produce Department */
 
+function cantaloupe() {
+  return new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      async function scrapeUrl(url) {
+        const browser = await puppeteer.launch({ headless: "new" }); // new headless https://developer.chrome.com/articles/new-headless/
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
+        await useProxy(page, proxyServer);
+        // const data = await useProxy.lookup(page);
+
+        // title
+        const [titleElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
+        );
+        const titleTxt = await titleElement.getProperty("textContent");
+        const title = await titleTxt.jsonValue();
+
+        // price
+        const [priceElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
+        );
+        const priceTxt = await priceElement.getProperty("textContent");
+        const price = await priceTxt.jsonValue();
+        const priceFinal = price.slice(1);
+
+        // pricePer100g
+        const [pricePer100gElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
+        );
+        const pricePer100gTxt = await pricePer100gElement.getProperty(
+          "textContent"
+        );
+        const pricePer100g = await pricePer100gTxt.jsonValue();
+        const pricePer100gFinal = ((pricePer100g.slice(1) * 100)/1360).toFixed(4);
+
+        // pricePerG
+        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+
+        const listing = await new produceDepartment({
+          title: title,
+          price: priceFinal,
+          pricePer100g: pricePer100gFinal,
+          pricePerGram: pricePerG,
+          date: date,
+          url: url,
+        });
+
+        listing.save();
+
+        const timer = scrapeTimer();
+
+        console.log({
+          title,
+          priceFinal,
+          pricePer100gFinal,
+          pricePerG,
+          date,
+          url,
+        });
+        console.log(`Current scraping time: ${timer}`);
+        browser.close();
+      }
+      resolve(scrapeUrl("https://www.nofrills.ca/cantaloupe/p/20167017001_EA"));
+    }, randomSecond);
+  });
+}
+function sweetPotato() {
+  return new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      async function scrapeUrl(url) {
+        const browser = await puppeteer.launch({ headless: "new" }); // new headless https://developer.chrome.com/articles/new-headless/
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
+        await useProxy(page, proxyServer);
+        // const data = await useProxy.lookup(page);
+
+        // title
+        const [titleElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
+        );
+        const titleTxt = await titleElement.getProperty("textContent");
+        const title = await titleTxt.jsonValue();
+
+        // price
+        const [priceElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
+        );
+        const priceTxt = await priceElement.getProperty("textContent");
+        const price = await priceTxt.jsonValue();
+        const priceFinal = price.slice(1);
+
+        // pricePer100g
+        const [pricePer100gElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
+        );
+        const pricePer100gTxt = await pricePer100gElement.getProperty(
+          "textContent"
+        );
+        const pricePer100g = await pricePer100gTxt.jsonValue();
+        const pricePer100gFinal = pricePer100g.slice(1);
+
+        // pricePerG
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
+
+
+        const listing = await new produceDepartment({
+          title: title,
+          price: priceFinal,
+          pricePer100g: pricePer100gFinal,
+          pricePerGram: pricePerG,
+          date: date,
+          url: url,
+        });
+
+        listing.save();
+
+        const timer = scrapeTimer();
+
+        console.log({
+          title,
+          priceFinal,
+          pricePer100gFinal,
+          pricePerG,
+          date,
+          url,
+        });
+        console.log(`Current scraping time: ${timer}`);
+        browser.close();
+      }
+      resolve(scrapeUrl("https://www.nofrills.ca/sweet-potatoes/p/20697331001_EA"));
+    }, randomSecond);
+  });
+}
+function carrots() {
+  return new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      async function scrapeUrl(url) {
+        const browser = await puppeteer.launch({ headless: "new" }); // new headless https://developer.chrome.com/articles/new-headless/
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
+        await useProxy(page, proxyServer);
+        // const data = await useProxy.lookup(page);
+
+        // title
+        const [titleElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
+        );
+        const titleTxt = await titleElement.getProperty("textContent");
+        const title = await titleTxt.jsonValue();
+
+        // price
+        const [priceElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
+        );
+        const priceTxt = await priceElement.getProperty("textContent");
+        const price = await priceTxt.jsonValue();
+        const priceFinal = price.slice(1);
+
+        // pricePer100g
+        const [pricePer100gElement] = await page.$x(
+          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
+        );
+        const pricePer100gTxt = await pricePer100gElement.getProperty(
+          "textContent"
+        );
+        const pricePer100g = await pricePer100gTxt.jsonValue();
+        const pricePer100gFinal = pricePer100g.slice(1)*0.1;
+
+        // pricePerG
+        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+
+
+        const listing = await new produceDepartment({
+          title: title,
+          price: priceFinal,
+          pricePer100g: pricePer100gFinal,
+          pricePerGram: pricePerG,
+          date: date,
+          url: url,
+        });
+
+        listing.save();
+
+        const timer = scrapeTimer();
+
+        console.log({
+          title,
+          priceFinal,
+          pricePer100gFinal,
+          pricePerG,
+          date,
+          url,
+        });
+        console.log(`Current scraping time: ${timer}`);
+        browser.close();
+      }
+      resolve(scrapeUrl("https://www.nofrills.ca/carrots/p/20116186001_KG"));
+    }, randomSecond);
+  });
+}
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
