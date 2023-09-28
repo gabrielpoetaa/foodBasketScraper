@@ -1,6 +1,11 @@
-import express from "express";
+import dotenv from "dotenv"
+dotenv.config()
+import connect from 'mongoose';
+import connection from "mongoose";
+import config from "dotenv"
 import cheerio from "cheerio";
 import fetch from "node-fetch";
+import express from "express"
 // import request from "request";
 // import bodyParser from "body-parser";
 // import axios from 'axios';
@@ -8,7 +13,7 @@ import fetch from "node-fetch";
 import puppeteer from "puppeteer";
 import mongoose from "mongoose";
 import useProxy from "puppeteer-page-proxy";
-import { resolveInclude } from "ejs";
+// import { resolveInclude } from "ejs";
 
 const app = express();
 const port = 3000;
@@ -54,8 +59,12 @@ const getProxies = async () => {
 };
 const proxyServer = await getProxies();
 
+
 // Database
-mongoose.connect("mongodb://localhost:27017/webScraping");
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_USER = process.env.DB_USER
+
+mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.mkxwkvb.mongodb.net/foodBasket`);
 
 // Database schema
 const webScrapingDBSchema = new mongoose.Schema({
