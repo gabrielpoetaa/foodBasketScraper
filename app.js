@@ -191,7 +191,7 @@ scrapeCheese()
 .then(rice)
 .then(peanuts)
 .then(function firstBreak() {
-  console.log("Scraping completed successfully");
+  console.log("SCRAPING COMPLETED SUCCESSFULLY");
 })
 
 
@@ -265,7 +265,7 @@ function scrapeCheese() {
           "https://www.nofrills.ca/cheddar-flavour-processed-cheese-product-slices/p/21220995_EA"
         )
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 
@@ -713,7 +713,7 @@ function chickenDrumstrick() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/chicken-drumstick/p/20654051_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function beefStirFry() {
@@ -783,7 +783,7 @@ function beefStirFry() {
           "https://www.nofrills.ca/beef-stir-fry-strips-inside-round/p/21189996_KG"
         )
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function outsideRoundSteak() {
@@ -853,7 +853,7 @@ function outsideRoundSteak() {
           "https://www.nofrills.ca/outside-round-steak-club-pack/p/20358059_KG"
         )
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function leanGroundBeef() {
@@ -921,7 +921,7 @@ function leanGroundBeef() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/lean-ground-beef/p/21125124_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function porkCenterChop() {
@@ -991,7 +991,7 @@ function porkCenterChop() {
           "https://www.nofrills.ca/free-from-boneless-pork-center-chop-tray-pack/p/21095303_KG"
         )
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function blackForestHam() {
@@ -1059,7 +1059,7 @@ function blackForestHam() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/black-forest-ham/p/20817362_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 
@@ -1131,7 +1131,7 @@ function cantaloupe() {
         browser.close();
       }
       resolve(scrapeUrl("https://www.nofrills.ca/cantaloupe/p/20167017001_EA"));
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function sweetPotato() {
@@ -1199,7 +1199,7 @@ function sweetPotato() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/sweet-potatoes/p/20697331001_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function carrots() {
@@ -1265,7 +1265,7 @@ function carrots() {
         browser.close();
       }
       resolve(scrapeUrl("https://www.nofrills.ca/carrots/p/20116186001_KG"));
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function romaineLettuce() {
@@ -1333,7 +1333,7 @@ function romaineLettuce() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/romaine-lettuce/p/20065036001_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function broccoliCrown() {
@@ -1401,7 +1401,7 @@ function broccoliCrown() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/broccoli-crown/p/21121560001_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function sweetGreenPeppers() {
@@ -1471,7 +1471,7 @@ function sweetGreenPeppers() {
           "https://www.nofrills.ca/sweet-green-peppers/p/20425893001_KG"
         )
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function apples() {
@@ -1539,7 +1539,7 @@ function apples() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/fuji-apples/p/20310940001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function bananas() {
@@ -1607,7 +1607,7 @@ function bananas() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/bananas-bunch/p/20175355001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function grapes() {
@@ -1677,7 +1677,7 @@ function grapes() {
           "https://www.nofrills.ca/pc-extra-large-red-seedless-grapes/p/20159199001_KG"
         )
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function orange() {
@@ -1745,7 +1745,7 @@ function orange() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/navel-orange/p/20426078001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function pears() {
@@ -1813,7 +1813,7 @@ function pears() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/yellow-asian-pears/p/20035618001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function potatoes() {
@@ -1881,7 +1881,7 @@ function potatoes() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/yellow-potatoes/p/20106716001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function turnips() {
@@ -1947,7 +1947,7 @@ function turnips() {
         browser.close();
       }
       resolve(scrapeUrl("https://www.nofrills.ca/turnips/p/20136107001_KG"));
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function cabbage() {
@@ -2015,7 +2015,7 @@ function cabbage() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/cabbage-green/p/20793034001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function cucumbers() {
@@ -2083,7 +2083,7 @@ function cucumbers() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/field-cucumbers/p/20027651001_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function celery() {
@@ -2151,7 +2151,7 @@ function celery() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/celery-stalks/p/20163119001_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function lettuceIceberg() {
@@ -2219,7 +2219,7 @@ function lettuceIceberg() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/lettuce-iceberg/p/20135326001_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function whiteMushrooms() {
@@ -2287,7 +2287,7 @@ function whiteMushrooms() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/white-mushrooms/p/20321225001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function onion() {
@@ -2355,7 +2355,7 @@ function onion() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/yellow-onion/p/20168304001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function tomatoes() {
@@ -2423,7 +2423,7 @@ function tomatoes() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/roma-tomatoes/p/20143381001_KG")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 
@@ -2496,7 +2496,7 @@ function pitaBread() {
           "https://www.nofrills.ca/wrap-me-white-flour-tortillas-large/p/20976626_EA"
         )
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function wheatBread() {
@@ -2564,7 +2564,7 @@ function wheatBread() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/100-whole-wheat-bread/p/21509877_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function originalBread() {
@@ -2632,7 +2632,7 @@ function originalBread() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/original-bread/p/21509822_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function hamburgerBread() {
@@ -2700,7 +2700,7 @@ function hamburgerBread() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/hamburger-buns/p/21509434_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 
@@ -2771,7 +2771,7 @@ function frozenFishFillet() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/wild-pollock-fillets/p/21167006_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function greenBeans() {
@@ -2839,7 +2839,7 @@ function greenBeans() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/cut-green-beans/p/20304191_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function mixedVegetables() {
@@ -2907,7 +2907,7 @@ function mixedVegetables() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/mixed-vegetables/p/20316388_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function greenPeas() {
@@ -2975,7 +2975,7 @@ function greenPeas() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/green-peas-club-size/p/20319825_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function concentratedOrangeJuice() {
@@ -3043,7 +3043,7 @@ function concentratedOrangeJuice() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/unsweetened-frozen-concentrated-pulp-free-orange-j/p/20552223001_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function frozenStrawberries() {
@@ -3111,7 +3111,7 @@ function frozenStrawberries() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/whole-strawberries/p/21033168_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 
@@ -3182,7 +3182,7 @@ function blackBeans() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/black-beans/p/20325921005_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function flakedTuna() {
@@ -3250,7 +3250,7 @@ function flakedTuna() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/flaked-light-tuna/p/20521648_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function wildSalmon() {
@@ -3318,7 +3318,7 @@ function wildSalmon() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/sustainably-sourced-wild-pacific-pink-salmon/p/20164488_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function peachSlices() {
@@ -3386,7 +3386,7 @@ function peachSlices() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/clingstone-peach-slices-in-juice-from-concentrate/p/20618824_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function crispCorn() {
@@ -3454,7 +3454,7 @@ function crispCorn() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/whole-kernel-crisp-corn/p/20303822_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function dicedTomatoes() {
@@ -3522,7 +3522,7 @@ function dicedTomatoes() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/diced-tomatoes/p/20600787_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function appleJuice() {
@@ -3590,7 +3590,7 @@ function appleJuice() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/apple-juice-from-concentrate/p/20087458_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function tomatoCocktail() {
@@ -3658,7 +3658,7 @@ function tomatoCocktail() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/original-tomato-clam-cocktail/p/20506849003_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function cereal() {
@@ -3726,7 +3726,7 @@ function cereal() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/frosted-flakes-cereal/p/21209747_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function granola() {
@@ -3794,7 +3794,7 @@ function granola() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/harvest-crunch-original-granola-cereal/p/21219824_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function oat() {
@@ -3862,7 +3862,7 @@ function oat() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/quick-100-whole-grain-oats/p/20923828_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function wholeWheatFlour() {
@@ -3930,7 +3930,7 @@ function wholeWheatFlour() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/whole-wheat-flour/p/20303325_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function allPurposeFlour() {
@@ -3998,7 +3998,7 @@ function allPurposeFlour() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/all-purpose-flour/p/20013256_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function raisins() {
@@ -4066,7 +4066,7 @@ function raisins() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/sultana-raisins/p/20647009_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function lentils() {
@@ -4134,7 +4134,7 @@ function lentils() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/lentils/p/20325921004_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function socialTeaBiscuits() {
@@ -4202,7 +4202,7 @@ function socialTeaBiscuits() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/social-tea-biscuits/p/20618577_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function crackers() {
@@ -4270,7 +4270,7 @@ function crackers() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/toppables-crackers/p/21449871_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function peanutButter() {
@@ -4338,7 +4338,7 @@ function peanutButter() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/smooth-peanut-butter-club-size/p/20323398002_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function vegetableOil() {
@@ -4406,7 +4406,7 @@ function vegetableOil() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/100-pure-vegetable-oil/p/20768660_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function caesarDressing() {
@@ -4474,7 +4474,7 @@ function caesarDressing() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/caesar-dressing/p/20628489001_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function italianDressing() {
@@ -4542,7 +4542,7 @@ function italianDressing() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/italian-dressing/p/20628489002_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function spaghetti() {
@@ -4610,7 +4610,7 @@ function spaghetti() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/spaghetti-pasta/p/20315613002_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function rice() {
@@ -4678,7 +4678,7 @@ function rice() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/long-grain-white-rice/p/20069589_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 function peanuts() {
@@ -4746,7 +4746,7 @@ function peanuts() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/salted-blanched-peanuts/p/20058865_EA")
       );
-    }, randomSecond);
+    }, randomSecond());
   });
 }
 
