@@ -63,8 +63,9 @@ const proxyServer = await getProxies();
 // Database
 const DB_PASSWORD = process.env.DB_PASSWORD
 const DB_USER = process.env.DB_USER
+const DB_ADDRESS = process.env.DB_ADDRESS
 
-mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.mkxwkvb.mongodb.net/foodBasket`);
+mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_ADDRESS}`);
 
 // Database schema
 const webScrapingDBSchema = new mongoose.Schema({
