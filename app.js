@@ -118,6 +118,7 @@ function scrapeTimer() {
 let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
+
 scrapeCheese()
 .then(scrapeCheeseBlock)
 .then(mediumCheeseSlices)
@@ -1753,8 +1754,9 @@ function orange() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/navel-orange/p/20426078001_KG")
+        scrapeUrl("https://www.nofrills.ca/navel-orange-medium/p/20287659001_KG")
       );
+      
     }, randomSecond());
   });
 }
