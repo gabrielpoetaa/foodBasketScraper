@@ -119,11 +119,12 @@ let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
 
-scrapeCheese()
-.then(scrapeCheeseBlock)
-.then(mediumCheeseSlices)
-.then(scrapeYogurt)
-.then(scrapeEggs)
+// scrapeCheese()
+// .then(scrapeCheeseBlock)
+// .then(mediumCheeseSlices)
+// .then(scrapeYogurt)
+scrapeEggs()
+// .then(scrapeEggs)
 .then(scrapeMargarine)
 .then(function firstBreak() {
   console.log("Finishing Refrigerated Food scraping");
@@ -533,18 +534,21 @@ function scrapeEggs() {
         const priceFinal = price.slice(1);
 
         // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = pricePer100g.slice(1);
+        // const [pricePer100gElement] = await page.$x(
+        //   '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
+        // );
+        // const pricePer100gTxt = await pricePer100gElement.getProperty(
+        //   "textContent"
+        // );
+        // const pricePer100g = await pricePer100gTxt.jsonValue();
+        // const pricePer100gFinal = pricePer100g.slice(1);
+
+        const pricePer100gFinal = (priceFinal * 100)/600;
+
 
         // pricePerG
 
-        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
+        const pricePerG = (pricePer100gFinal/100).toFixed(4);
 
         // Date
 
@@ -576,7 +580,7 @@ function scrapeEggs() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/large-grade-a-eggs/p/20812144001_EA")
+        scrapeUrl("https://www.nofrills.ca/free-range-large-brown-eggs/p/20813711001_EA")
       );
     }, randomSecond());
   });
