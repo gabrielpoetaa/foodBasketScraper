@@ -119,12 +119,11 @@ let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
 
-// scrapeCheese()
-// .then(scrapeCheeseBlock)
-// .then(mediumCheeseSlices)
-// .then(scrapeYogurt)
-scrapeEggs()
-// .then(scrapeEggs)
+scrapeCheese()
+.then(scrapeCheeseBlock)
+.then(mediumCheeseSlices)
+.then(scrapeYogurt)
+.then(scrapeEggs)
 .then(scrapeMargarine)
 .then(function firstBreak() {
   console.log("Finishing Refrigerated Food scraping");
