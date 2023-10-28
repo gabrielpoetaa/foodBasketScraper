@@ -118,7 +118,6 @@ function scrapeTimer() {
 let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
-
 scrapeCheese()
 .then(scrapeCheeseBlock)
 .then(mediumCheeseSlices)
@@ -1120,16 +1119,16 @@ function cantaloupe() {
         // pricePerG
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
-        const listing = await new produceDepartment({
-          title: title,
-          price: priceFinal,
-          pricePer100g: pricePer100gFinal,
-          pricePerGram: pricePerG,
-          date: date,
-          url: url,
-        });
+        // const listing = await new produceDepartment({
+        //   title: title,
+        //   price: priceFinal,
+        //   pricePer100g: pricePer100gFinal,
+        //   pricePerGram: pricePerG,
+        //   date: date,
+        //   url: url,
+        // });
 
-        listing.save();
+        // listing.save();
 
         const timer = scrapeTimer();
 
