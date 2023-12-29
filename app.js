@@ -69,6 +69,7 @@ mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_ADDRESS}`);
 
 // Database schema
 const webScrapingDBSchema = new mongoose.Schema({
+  id: Number,
   title: String,
   price: Number,
   pricePer100g: Number,
@@ -119,6 +120,7 @@ let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
 
+
 scrapeCheese()
 .then(scrapeCheeseBlock)
 .then(mediumCheeseSlices)
@@ -147,8 +149,8 @@ scrapeCheese()
 .then(sweetGreenPeppers)
 .then(apples)
 .then(bananas)
-.then(grapes)
-.then(orange)
+.then(grapes) 
+.then(orange) // UPDATE! 
 .then(pears)
 .then(potatoes)
 .then(turnips)
@@ -177,6 +179,10 @@ scrapeCheese()
 .then(greenPeas)
 .then(concentratedOrangeJuice)
 .then(frozenStrawberries)
+.then(function firstBreak() {
+  console.log("Finishing Frozen Food Department scraping");
+  console.log("Starting Canned and Dry Department scraping")
+})
 .then(blackBeans)
 .then(flakedTuna)
 .then(wildSalmon)
@@ -206,7 +212,6 @@ scrapeCheese()
 })
 
 
-
 /* Regrigerated Food */
 
 function scrapeCheese() {
@@ -218,6 +223,9 @@ function scrapeCheese() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        // id
+        const id = 1;
 
         // title
         const [titleElement] = await page.$x(
@@ -248,6 +256,7 @@ function scrapeCheese() {
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new refrigeratedFoodSection({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -261,6 +270,7 @@ function scrapeCheese() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -279,7 +289,6 @@ function scrapeCheese() {
     }, randomSecond());
   });
 }
-
 function scrapeCheeseBlock() {
   return new Promise(function (resolve, reject) {
     setTimeout(() => {
@@ -289,6 +298,8 @@ function scrapeCheeseBlock() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        const id = 2;
 
         // title
         const [titleElement] = await page.$x(
@@ -324,6 +335,7 @@ function scrapeCheeseBlock() {
         // URL
 
         const listing = await new refrigeratedFoodSection({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -337,6 +349,7 @@ function scrapeCheeseBlock() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -366,6 +379,8 @@ function mediumCheeseSlices() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 3;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -400,6 +415,7 @@ function mediumCheeseSlices() {
         // URL
 
         const listing = await new refrigeratedFoodSection({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -413,6 +429,7 @@ function mediumCheeseSlices() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -442,6 +459,8 @@ function scrapeYogurt() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 4;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -476,6 +495,7 @@ function scrapeYogurt() {
         // URL
 
         const listing = await new refrigeratedFoodSection({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -489,6 +509,7 @@ function scrapeYogurt() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -516,6 +537,8 @@ function scrapeEggs() {
         const page = await browser.newPage();
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
+
+        const id = 5;
 
         // title
         const [titleElement] = await page.$x(
@@ -554,6 +577,7 @@ function scrapeEggs() {
         // URL
 
         const listing = await new refrigeratedFoodSection({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -567,6 +591,7 @@ function scrapeEggs() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -593,6 +618,8 @@ function scrapeMargarine() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        const id = 6;
 
         // title
         const [titleElement] = await page.$x(
@@ -628,6 +655,7 @@ function scrapeMargarine() {
         // URL
 
         const listing = await new refrigeratedFoodSection({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -641,6 +669,7 @@ function scrapeMargarine() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -672,6 +701,8 @@ function chickenDrumstrick() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 7;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -701,6 +732,7 @@ function chickenDrumstrick() {
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -714,6 +746,7 @@ function chickenDrumstrick() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -740,6 +773,8 @@ function beefStirFry() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 8;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -769,6 +804,7 @@ function beefStirFry() {
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -782,6 +818,7 @@ function beefStirFry() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -810,6 +847,8 @@ function outsideRoundSteak() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 9; 
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -839,6 +878,7 @@ function outsideRoundSteak() {
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -852,6 +892,7 @@ function outsideRoundSteak() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -879,6 +920,8 @@ function leanGroundBeef() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        const id = 10;
 
         // title
         const [titleElement] = await page.$x(
@@ -909,6 +952,7 @@ function leanGroundBeef() {
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -922,6 +966,7 @@ function leanGroundBeef() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -947,6 +992,8 @@ function porkCenterChop() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        const id = 11;
 
         // title
         const [titleElement] = await page.$x(
@@ -977,6 +1024,7 @@ function porkCenterChop() {
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -990,6 +1038,7 @@ function porkCenterChop() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1018,6 +1067,8 @@ function blackForestHam() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 12;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1047,6 +1098,7 @@ function blackForestHam() {
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1060,6 +1112,7 @@ function blackForestHam() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1088,6 +1141,8 @@ function cantaloupe() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        const id = 13;
 
         // title
         const [titleElement] = await page.$x(
@@ -1121,6 +1176,7 @@ function cantaloupe() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1134,6 +1190,7 @@ function cantaloupe() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1157,6 +1214,8 @@ function sweetPotato() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        const id = 14;
 
         // title
         const [titleElement] = await page.$x(
@@ -1187,6 +1246,7 @@ function sweetPotato() {
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1200,6 +1260,7 @@ function sweetPotato() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1225,6 +1286,8 @@ function carrots() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+        
+        const id = 15;
 
         // title
         const [titleElement] = await page.$x(
@@ -1255,6 +1318,7 @@ function carrots() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1268,6 +1332,7 @@ function carrots() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1291,6 +1356,8 @@ function romaineLettuce() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        const id = 16;
 
         // title
         const [titleElement] = await page.$x(
@@ -1321,6 +1388,7 @@ function romaineLettuce() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1334,6 +1402,7 @@ function romaineLettuce() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1360,6 +1429,8 @@ function broccoliCrown() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 17; 
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1389,6 +1460,7 @@ function broccoliCrown() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1402,6 +1474,7 @@ function broccoliCrown() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1428,6 +1501,8 @@ function sweetGreenPeppers() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 18;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1457,6 +1532,7 @@ function sweetGreenPeppers() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1470,6 +1546,7 @@ function sweetGreenPeppers() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1498,6 +1575,8 @@ function apples() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 19;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1527,6 +1606,7 @@ function apples() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1540,6 +1620,7 @@ function apples() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1566,6 +1647,8 @@ function bananas() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 20;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1595,6 +1678,7 @@ function bananas() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1608,6 +1692,7 @@ function bananas() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1634,6 +1719,8 @@ function grapes() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 21; 
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1663,6 +1750,7 @@ function grapes() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1676,6 +1764,7 @@ function grapes() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1704,6 +1793,8 @@ function orange() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 22; 
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1733,6 +1824,7 @@ function orange() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1746,6 +1838,7 @@ function orange() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1773,6 +1866,8 @@ function pears() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 23;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1802,6 +1897,7 @@ function pears() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1815,6 +1911,7 @@ function pears() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1841,6 +1938,8 @@ function potatoes() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 24;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1870,6 +1969,7 @@ function potatoes() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1883,6 +1983,7 @@ function potatoes() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1909,6 +2010,8 @@ function turnips() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 25;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -1938,6 +2041,7 @@ function turnips() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -1951,6 +2055,7 @@ function turnips() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -1975,6 +2080,8 @@ function cabbage() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 26;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2004,6 +2111,7 @@ function cabbage() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2017,6 +2125,7 @@ function cabbage() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2043,6 +2152,8 @@ function cucumbers() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 27;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2072,6 +2183,7 @@ function cucumbers() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2085,6 +2197,7 @@ function cucumbers() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2111,6 +2224,8 @@ function celery() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 28;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2140,6 +2255,7 @@ function celery() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2153,6 +2269,7 @@ function celery() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2179,6 +2296,8 @@ function lettuceIceberg() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 29;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2208,6 +2327,7 @@ function lettuceIceberg() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2221,6 +2341,7 @@ function lettuceIceberg() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2246,6 +2367,8 @@ function whiteMushrooms() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+
+        const id = 30;
 
         // title
         const [titleElement] = await page.$x(
@@ -2276,6 +2399,7 @@ function whiteMushrooms() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2289,6 +2413,7 @@ function whiteMushrooms() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2315,6 +2440,8 @@ function onion() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 31;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2344,6 +2471,7 @@ function onion() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2357,6 +2485,7 @@ function onion() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2383,6 +2512,8 @@ function tomatoes() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 32;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2412,6 +2543,7 @@ function tomatoes() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new produceDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2425,6 +2557,7 @@ function tomatoes() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2454,6 +2587,8 @@ function pitaBread() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 33;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2483,6 +2618,7 @@ function pitaBread() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2496,6 +2632,7 @@ function pitaBread() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2523,6 +2660,8 @@ function wheatBread() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
+        
+        const id = 34;
 
         // title
         const [titleElement] = await page.$x(
@@ -2553,6 +2692,7 @@ function wheatBread() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2566,6 +2706,7 @@ function wheatBread() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2592,6 +2733,8 @@ function originalBread() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 35;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2621,6 +2764,7 @@ function originalBread() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2634,6 +2778,7 @@ function originalBread() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2660,6 +2805,8 @@ function hamburgerBread() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 36;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2689,6 +2836,7 @@ function hamburgerBread() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2702,6 +2850,7 @@ function hamburgerBread() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2731,6 +2880,8 @@ function frozenFishFillet() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 37;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2760,6 +2911,7 @@ function frozenFishFillet() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2773,6 +2925,7 @@ function frozenFishFillet() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2799,6 +2952,8 @@ function greenBeans() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 38;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2828,6 +2983,7 @@ function greenBeans() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2841,6 +2997,7 @@ function greenBeans() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2867,6 +3024,8 @@ function mixedVegetables() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 39;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2896,6 +3055,7 @@ function mixedVegetables() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2909,6 +3069,7 @@ function mixedVegetables() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -2935,6 +3096,8 @@ function greenPeas() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 40;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -2964,6 +3127,7 @@ function greenPeas() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -2977,6 +3141,7 @@ function greenPeas() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3003,6 +3168,8 @@ function concentratedOrangeJuice() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 41;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3032,6 +3199,7 @@ function concentratedOrangeJuice() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3045,6 +3213,7 @@ function concentratedOrangeJuice() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3071,6 +3240,8 @@ function frozenStrawberries() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 42;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3100,6 +3271,7 @@ function frozenStrawberries() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3113,6 +3285,7 @@ function frozenStrawberries() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3142,6 +3315,8 @@ function blackBeans() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 43;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3171,6 +3346,7 @@ function blackBeans() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3184,6 +3360,7 @@ function blackBeans() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3210,6 +3387,8 @@ function flakedTuna() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 44;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3239,6 +3418,7 @@ function flakedTuna() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3252,6 +3432,7 @@ function flakedTuna() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3278,6 +3459,8 @@ function wildSalmon() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 45;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3307,6 +3490,7 @@ function wildSalmon() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3320,6 +3504,7 @@ function wildSalmon() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3346,6 +3531,8 @@ function peachSlices() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 46;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3375,6 +3562,7 @@ function peachSlices() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3388,6 +3576,7 @@ function peachSlices() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3414,6 +3603,8 @@ function crispCorn() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 47;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3443,6 +3634,7 @@ function crispCorn() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3456,6 +3648,7 @@ function crispCorn() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3482,6 +3675,8 @@ function dicedTomatoes() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 48;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3511,6 +3706,7 @@ function dicedTomatoes() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3524,6 +3720,7 @@ function dicedTomatoes() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3550,6 +3747,8 @@ function appleJuice() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 49;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3579,6 +3778,7 @@ function appleJuice() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3592,6 +3792,7 @@ function appleJuice() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3618,6 +3819,8 @@ function tomatoCocktail() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 50;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3647,6 +3850,7 @@ function tomatoCocktail() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3660,6 +3864,7 @@ function tomatoCocktail() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3686,6 +3891,8 @@ function cereal() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 51;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3715,6 +3922,7 @@ function cereal() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3728,6 +3936,7 @@ function cereal() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3754,6 +3963,8 @@ function granola() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 52;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3783,6 +3994,7 @@ function granola() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3796,6 +4008,7 @@ function granola() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3822,6 +4035,8 @@ function oat() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 53;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3851,6 +4066,7 @@ function oat() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3864,6 +4080,7 @@ function oat() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3890,6 +4107,8 @@ function wholeWheatFlour() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 54;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3919,6 +4138,7 @@ function wholeWheatFlour() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -3932,6 +4152,7 @@ function wholeWheatFlour() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -3958,6 +4179,8 @@ function allPurposeFlour() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 55;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -3987,6 +4210,7 @@ function allPurposeFlour() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4000,6 +4224,7 @@ function allPurposeFlour() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4026,6 +4251,8 @@ function raisins() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 56;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4055,6 +4282,7 @@ function raisins() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4068,6 +4296,7 @@ function raisins() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4094,6 +4323,8 @@ function lentils() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 57;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4123,6 +4354,7 @@ function lentils() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4136,6 +4368,7 @@ function lentils() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4162,6 +4395,8 @@ function socialTeaBiscuits() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 58;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4191,6 +4426,7 @@ function socialTeaBiscuits() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4204,6 +4440,7 @@ function socialTeaBiscuits() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4230,6 +4467,8 @@ function crackers() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 59;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4259,6 +4498,7 @@ function crackers() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4272,6 +4512,7 @@ function crackers() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4298,6 +4539,8 @@ function peanutButter() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 60;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4327,6 +4570,7 @@ function peanutButter() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4340,6 +4584,7 @@ function peanutButter() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4366,6 +4611,8 @@ function vegetableOil() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 61;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4395,6 +4642,7 @@ function vegetableOil() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4408,6 +4656,7 @@ function vegetableOil() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4434,6 +4683,8 @@ function caesarDressing() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 62;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4463,6 +4714,7 @@ function caesarDressing() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4476,6 +4728,7 @@ function caesarDressing() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4502,6 +4755,8 @@ function italianDressing() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 63;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4531,6 +4786,7 @@ function italianDressing() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4544,6 +4800,7 @@ function italianDressing() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4570,6 +4827,8 @@ function spaghetti() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 64;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4599,6 +4858,7 @@ function spaghetti() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4612,6 +4872,7 @@ function spaghetti() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4638,6 +4899,8 @@ function rice() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 65;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4667,6 +4930,7 @@ function rice() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4680,6 +4944,7 @@ function rice() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
@@ -4706,6 +4971,8 @@ function peanuts() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
+        const id = 66;
+
         // title
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
@@ -4735,6 +5002,7 @@ function peanuts() {
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
+          id: id,
           title: title,
           price: priceFinal,
           pricePer100g: pricePer100gFinal,
@@ -4748,6 +5016,7 @@ function peanuts() {
         const timer = scrapeTimer();
 
         console.log({
+          id,
           title,
           priceFinal,
           pricePer100gFinal,
