@@ -129,7 +129,7 @@ scrapeCheese()
   console.log("Finishing Refrigerated Food scraping");
   console.log("Starting Meat Department scraping")
 })
-.then(chickenDrumstrick)
+// .then(chickenDrumstrick)
 .then(beefStirFry)
 .then(outsideRoundSteak)
 .then(leanGroundBeef)
@@ -1120,16 +1120,16 @@ function cantaloupe() {
         // pricePerG
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
-        const listing = await new produceDepartment({
-          title: title,
-          price: priceFinal,
-          pricePer100g: pricePer100gFinal,
-          pricePerGram: pricePerG,
-          date: date,
-          url: url,
-        });
+        // const listing = await new produceDepartment({
+        //   title: title,
+        //   price: priceFinal,
+        //   pricePer100g: pricePer100gFinal,
+        //   pricePerGram: pricePerG,
+        //   date: date,
+        //   url: url,
+        // });
 
-        listing.save();
+        // listing.save();
 
         const timer = scrapeTimer();
 
