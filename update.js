@@ -21,6 +21,7 @@ async function connectToMongoDB() {
 async function updateDocument(db) {
   const cannedanddrycollection = db.collection('cannedanddrydepartments');
   const bakerycollection = db.collection('bakerydepartments');
+  const refrigeratedfoodsections = db.collection('refrigeratedfoodsections')
 
   try {
     const wholeGrain = await cannedanddrycollection.updateMany(
@@ -43,12 +44,18 @@ async function updateDocument(db) {
       { title: "100% Whole Wheat Bread" },
       { $set: { title: "Whole Wheat Bread" } }
     );
-
-
-    // db.cannedanddrydepartments.updateMany( {title: "Whole Grain Oats"}, { $set: { title: "Quick 100% Whole Grain Oats"}} )
-
     console.log(`Matched ${result.matchedCount} document(s) from BAKERY collection
      and modified ${result.modifiedCount} document(s)`);
+  } catch (error) {
+    console.error('Error updating document:', error);
+  }
+  try {
+    const refrigeratedFoodsections = await refrigeratedfoodsections.updateMany(
+      { title: "Vanilla, Blueberry, Strawberry & Raspberry 0% M.F. Stirred Yogurt" },
+      { $set: { title: "Vanilla, Blueberry, Strawberry e Raspberry Yogurt" } }
+    );
+    console.log(`Matched ${refrigeratedFoodsections.matchedCount} document(s) from REFRIGERATED collection
+     and modified ${refrigeratedFoodsections.modifiedCount} document(s)`);
   } catch (error) {
     console.error('Error updating document:', error);
   }

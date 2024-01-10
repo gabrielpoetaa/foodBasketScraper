@@ -83,7 +83,9 @@ const refrigeratedFoodSection = mongoose.model(
   "refrigeratedFoodSection",
   webScrapingDBSchema
 );
-const meatDepartment = mongoose.model("meatDepartment", webScrapingDBSchema);
+const meatDepartment = mongoose.model(
+  "meatDepartment", webScrapingDBSchema)
+  ;
 const produceDepartment = mongoose.model(
   "produceDepartment",
   webScrapingDBSchema
@@ -147,10 +149,10 @@ scrapeCheese()
 .then(romaineLettuce)
 .then(broccoliCrown)
 .then(sweetGreenPeppers)
-.then(apples)
+// .then(apples) // UPDATE
 .then(bananas)
 .then(grapes) 
-.then(orange) // UPDATE! 
+// .then(orange) // UPDATE! 
 .then(pears)
 .then(potatoes)
 .then(turnips)
@@ -1175,16 +1177,6 @@ function cantaloupe() {
         // pricePerG
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
-<<<<<<< HEAD
-        // const listing = await new produceDepartment({
-        //   title: title,
-        //   price: priceFinal,
-        //   pricePer100g: pricePer100gFinal,
-        //   pricePerGram: pricePerG,
-        //   date: date,
-        //   url: url,
-        // });
-=======
         const listing = await new produceDepartment({
           id: id,
           title: title,
@@ -1194,7 +1186,6 @@ function cantaloupe() {
           date: date,
           url: url,
         });
->>>>>>> 634035f4ac818f8071517d6adf879767d3a468cd
 
         // listing.save();
 
