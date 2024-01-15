@@ -83,7 +83,9 @@ const refrigeratedFoodSection = mongoose.model(
   "refrigeratedFoodSection",
   webScrapingDBSchema
 );
-const meatDepartment = mongoose.model("meatDepartment", webScrapingDBSchema);
+const meatDepartment = mongoose.model(
+  "meatDepartment", webScrapingDBSchema)
+  ;
 const produceDepartment = mongoose.model(
   "produceDepartment",
   webScrapingDBSchema
@@ -147,7 +149,7 @@ scrapeCheese()
 .then(romaineLettuce)
 .then(broccoliCrown)
 .then(sweetGreenPeppers)
-.then(apples)
+// .then(apples) // UPDATE
 .then(bananas)
 .then(grapes) 
 // .then(orange) // UPDATE! 
@@ -1185,7 +1187,7 @@ function cantaloupe() {
           url: url,
         });
 
-        listing.save();
+        // listing.save();
 
         const timer = scrapeTimer();
 
