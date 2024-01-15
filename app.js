@@ -131,7 +131,7 @@ scrapeCheese()
   console.log("Finishing Refrigerated Food scraping");
   console.log("Starting Meat Department scraping")
 })
-.then(chickenDrumstrick)
+// .then(chickenDrumstrick)
 .then(beefStirFry)
 .then(outsideRoundSteak)
 .then(leanGroundBeef)
@@ -150,7 +150,7 @@ scrapeCheese()
 .then(apples)
 .then(bananas)
 .then(grapes) 
-.then(orange) // UPDATE! 
+// .then(orange) // UPDATE! 
 .then(pears)
 .then(potatoes)
 .then(turnips)
