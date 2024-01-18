@@ -212,6 +212,9 @@ scrapeCheese()
 .then(function firstBreak() {
   console.log("SCRAPING COMPLETED SUCCESSFULLY");
 })
+.catch(error => {
+  console.error("Error querying collections:", error);
+});
 
 
 /* Regrigerated Food */

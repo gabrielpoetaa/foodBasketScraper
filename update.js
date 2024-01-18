@@ -59,6 +59,16 @@ async function updateDocument(db) {
   } catch (error) {
     console.error('Error updating document:', error);
   }
+  try {
+    const refrigeratedFoodsections = await refrigeratedfoodsections.updateMany(
+      { title: "Pizza Mozzarella Cheese with 28% M.F." },
+      { $set: { title: "Mozzarella Cheese" } }
+    );
+    console.log(`Matched ${refrigeratedFoodsections.matchedCount} document(s) from REFRIGERATED collection
+     and modified ${refrigeratedFoodsections.modifiedCount} document(s)`);
+  } catch (error) {
+    console.error('Error updating document:', error);
+  }
 }
 
 async function main() {
