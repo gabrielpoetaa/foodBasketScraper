@@ -61,7 +61,7 @@ async function updateDocument(db) {
   }
 }
 
-async function main() {
+async function updateTitles() {
   try {
     const db = await connectToMongoDB();
     await updateDocument(db);
@@ -73,4 +73,6 @@ async function main() {
   }
 }
 
-main();
+// main();
+
+export {updateTitles}

@@ -15,6 +15,9 @@ import mongoose from "mongoose";
 import useProxy from "puppeteer-page-proxy";
 // import { resolveInclude } from "ejs";
 
+
+import { updateTitles } from "./update.js";
+
 const app = express();
 const port = 3000;
 let randomNumber = Math.floor(Math.random() * 100);
@@ -117,11 +120,17 @@ function scrapeTimer() {
   return scrapeTimer;
 }
 
+// Function to close the database connection
+function closeDatabaseConnection() {
+  return mongoose.disconnect();
+}
+
 // Console.log proxy being used
 let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
 
+async function mainScrapingFunction(){
 
 scrapeCheese()
 .then(scrapeCheeseBlock)
@@ -129,19 +138,18 @@ scrapeCheese()
 .then(scrapeYogurt)
 .then(scrapeEggs)
 .then(scrapeMargarine)
-.then(function firstBreak() {
+.then(function finishRefrigerated() {
   console.log("Finishing Refrigerated Food scraping");
-  console.log("Starting Meat Department scraping")
+  console.log("Starting Meat Department scraping");
 })
-// .then(chickenDrumstrick)
 .then(beefStirFry)
 .then(outsideRoundSteak)
 .then(leanGroundBeef)
 .then(porkCenterChop)
 .then(blackForestHam)
-.then(function firstBreak() {
+.then(function finishMeatDepartment() {
   console.log("Finishing Meat Department scraping");
-  console.log("Starting Produce Department scraping")
+  console.log("Starting Produce Department scraping");
 })
 .then(cantaloupe)
 .then(sweetPotato)
@@ -149,10 +157,8 @@ scrapeCheese()
 .then(romaineLettuce)
 .then(broccoliCrown)
 .then(sweetGreenPeppers)
-// .then(apples) // UPDATE
 .then(bananas)
 .then(grapes) 
-// .then(orange) // UPDATE! 
 .then(pears)
 .then(potatoes)
 .then(turnips)
@@ -163,17 +169,17 @@ scrapeCheese()
 .then(whiteMushrooms)
 .then(onion)
 .then(tomatoes)
-.then(function firstBreak() {
+.then(function finishProduceDepartment() {
   console.log("Finishing Produce Department scraping");
-  console.log("Starting Bakery Department scraping")
+  console.log("Starting Bakery Department scraping");
 })
 .then(pitaBread)
 .then(wheatBread)
 .then(originalBread)
 .then(hamburgerBread)
-.then(function firstBreak() {
+.then(function finishBakeryDepartment() {
   console.log("Finishing Bakery Department scraping");
-  console.log("Starting Frozen Food Department scraping")
+  console.log("Starting Frozen Food Department scraping");
 })
 .then(frozenFishFillet)
 .then(greenBeans)
@@ -181,9 +187,9 @@ scrapeCheese()
 .then(greenPeas)
 .then(concentratedOrangeJuice)
 .then(frozenStrawberries)
-.then(function firstBreak() {
+.then(function finishFrozenFood() {
   console.log("Finishing Frozen Food Department scraping");
-  console.log("Starting Canned and Dry Department scraping")
+  console.log("Starting Canned and Dry Department scraping");
 })
 .then(blackBeans)
 .then(flakedTuna)
@@ -194,7 +200,6 @@ scrapeCheese()
 .then(appleJuice)
 .then(tomatoCocktail)
 .then(cereal)
-.then(granola)
 .then(oat)
 .then(wholeWheatFlour)
 .then(allPurposeFlour)
@@ -209,10 +214,32 @@ scrapeCheese()
 .then(spaghetti)
 .then(rice)
 .then(peanuts)
-.then(function firstBreak() {
+.then(async () => {
   console.log("SCRAPING COMPLETED SUCCESSFULLY");
+  // Close the database connection (if needed)
+  // await closeDatabaseConnection();
+  
+  console.log('Starting update process...');
+  await updateTitles();
+  console.log('Update process completed successfully.');
 })
+.then(() => {
+  console.log('All operations completed. Exiting the application...');
+  // Close any remaining connections and exit
+  // await closeDatabaseConnection(); // if not already closed
+  process.exit(0); // Exit the application with a success status code
+})
+.catch(async (error) => {
+  console.error('An error occurred:', error);
+  // Attempt to close the database connection even if there's an error
+  await closeDatabaseConnection().finally(() => {
+      console.error("Exiting the application due to an error.");
+      process.exit(1); // Exit the application with an error status code
+  });
+});
+}
 
+mainScrapingFunction();
 
 /* Regrigerated Food */
 
@@ -288,7 +315,7 @@ function scrapeCheese() {
           "https://www.nofrills.ca/cheddar-flavour-processed-cheese-product-slices/p/21220995_EA"
         )
       );
-    }, randomSecond());
+    },);
   });
 }
 function scrapeCheeseBlock() {
@@ -1634,7 +1661,7 @@ function apples() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/fuji-apples/p/20310940001_KG")
+        scrapeUrl("https://www.nofrills.ca/honeycrisp-apples/p/20132621001_KG")
       );
     }, randomSecond());
   });
@@ -1852,7 +1879,7 @@ function orange() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/navel-orange-medium/p/20287659001_KG")
+        scrapeUrl("https://www.nofrills.ca/navel-orange/p/20426078001_KG")
       );
       
     }, randomSecond());
