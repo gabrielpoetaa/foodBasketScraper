@@ -1,8 +1,13 @@
-// yourfile.mjs
-
 import { MongoClient } from 'mongodb';
 
-const connectionString = 'mongodb+srv://gugapoeta:Renatoquerido88!@cluster0.mkxwkvb.mongodb.net/';
+import dotenv from "dotenv"
+dotenv.config()
+
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_USER = process.env.DB_USER
+const DB_ADDRESS = process.env.DB_ADDRESS
+
+const connectionString = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_ADDRESS}`;
 let client; // Define client in the global scope
 
 async function connectToMongoDB() {
