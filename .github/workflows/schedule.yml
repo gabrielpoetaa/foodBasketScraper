@@ -6,6 +6,7 @@ on:
     # You might need to adjust the time to your timezone.
     # Cron format: <minute> <hour> <day-of-month> <month> <day-of-week>
     - cron: '0 22 * * *'
+  workflow_dispatch:
 
 jobs:
   build:
