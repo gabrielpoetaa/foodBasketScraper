@@ -25,6 +25,5 @@ jobs:
 
     - name: Run the Node app
       run: node webscraper.js
-
       # Or use the command you usually use to start your application,
       # e.g., `node app.js`, `npm run dev`, etc.
