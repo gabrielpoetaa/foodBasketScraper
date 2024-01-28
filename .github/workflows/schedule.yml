@@ -1,0 +1,30 @@
+name: Run Node App
+
+on:
+  schedule:
+    # Schedule to run at 10 PM UTC every day.
+    # You might need to adjust the time to your timezone.
+    # Cron format: <minute> <hour> <day-of-month> <month> <day-of-week>
+    - cron: '0 22 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16' # Specify the Node.js version you want to use
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run the Node app
+      run: node webscraper.js
+
+      # Or use the command you usually use to start your application,
+      # e.g., `node app.js`, `npm run dev`, etc.
