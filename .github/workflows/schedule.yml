@@ -25,6 +25,8 @@ jobs:
       run: npm install
 
     - name: Run the Node app
+      env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }} # Set the secret as an environment variable
       run: node webscraper.js
       # Or use the command you usually use to start your application,
       # e.g., `node app.js`, `npm run dev`, etc.

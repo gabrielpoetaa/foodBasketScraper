@@ -133,87 +133,87 @@ console.log(proxy);
 async function mainScrapingFunction(){
 
 scrapeCheese()
-// .then(scrapeCheeseBlock)
-// .then(mediumCheeseSlices)
-// .then(scrapeYogurt)
-// .then(scrapeEggs)
-// .then(scrapeMargarine)
-// .then(function finishRefrigerated() {
-//   console.log("Finishing Refrigerated Food scraping");
-//   console.log("Starting Meat Department scraping");
-// })
-// .then(beefStirFry)
-// .then(outsideRoundSteak)
-// .then(leanGroundBeef)
-// .then(porkCenterChop)
-// .then(blackForestHam)
-// .then(function finishMeatDepartment() {
-//   console.log("Finishing Meat Department scraping");
-//   console.log("Starting Produce Department scraping");
-// })
-// .then(cantaloupe)
-// .then(sweetPotato)
-// .then(carrots)
-// .then(romaineLettuce)
-// .then(broccoliCrown)
-// .then(sweetGreenPeppers)
-// .then(bananas)
-// .then(grapes) 
-// .then(pears)
-// .then(potatoes)
-// .then(turnips)
-// .then(cabbage)
-// .then(cucumbers)
-// .then(celery)
-// .then(lettuceIceberg)
-// .then(whiteMushrooms)
-// .then(onion)
-// .then(tomatoes)
-// .then(function finishProduceDepartment() {
-//   console.log("Finishing Produce Department scraping");
-//   console.log("Starting Bakery Department scraping");
-// })
-// .then(pitaBread)
-// .then(wheatBread)
-// .then(originalBread)
-// .then(hamburgerBread)
-// .then(function finishBakeryDepartment() {
-//   console.log("Finishing Bakery Department scraping");
-//   console.log("Starting Frozen Food Department scraping");
-// })
-// .then(frozenFishFillet)
-// .then(greenBeans)
-// .then(mixedVegetables)
-// .then(greenPeas)
-// .then(concentratedOrangeJuice)
-// .then(frozenStrawberries)
-// .then(function finishFrozenFood() {
-//   console.log("Finishing Frozen Food Department scraping");
-//   console.log("Starting Canned and Dry Department scraping");
-// })
-// .then(blackBeans)
-// .then(flakedTuna)
-// .then(wildSalmon)
-// .then(peachSlices)
-// .then(crispCorn)
-// .then(dicedTomatoes)
-// .then(appleJuice)
-// .then(tomatoCocktail)
-// .then(cereal)
-// .then(oat)
-// .then(wholeWheatFlour)
-// .then(allPurposeFlour)
-// .then(raisins)
-// .then(lentils)
-// .then(socialTeaBiscuits)
-// .then(crackers)
-// .then(peanutButter)
-// .then(vegetableOil)
-// .then(caesarDressing)
-// .then(italianDressing)
-// .then(spaghetti)
-// .then(rice)
-// .then(peanuts)
+.then(scrapeCheeseBlock)
+.then(mediumCheeseSlices)
+.then(scrapeYogurt)
+.then(scrapeEggs)
+.then(scrapeMargarine)
+.then(function finishRefrigerated() {
+  console.log("Finishing Refrigerated Food scraping");
+  console.log("Starting Meat Department scraping");
+})
+.then(beefStirFry)
+.then(outsideRoundSteak)
+.then(leanGroundBeef)
+.then(porkCenterChop)
+.then(blackForestHam)
+.then(function finishMeatDepartment() {
+  console.log("Finishing Meat Department scraping");
+  console.log("Starting Produce Department scraping");
+})
+.then(cantaloupe)
+.then(sweetPotato)
+.then(carrots)
+.then(romaineLettuce)
+.then(broccoliCrown)
+.then(sweetGreenPeppers)
+.then(bananas)
+.then(grapes) 
+.then(pears)
+.then(potatoes)
+.then(turnips)
+.then(cabbage)
+.then(cucumbers)
+.then(celery)
+.then(lettuceIceberg)
+.then(whiteMushrooms)
+.then(onion)
+.then(tomatoes)
+.then(function finishProduceDepartment() {
+  console.log("Finishing Produce Department scraping");
+  console.log("Starting Bakery Department scraping");
+})
+.then(pitaBread)
+.then(wheatBread)
+.then(originalBread)
+.then(hamburgerBread)
+.then(function finishBakeryDepartment() {
+  console.log("Finishing Bakery Department scraping");
+  console.log("Starting Frozen Food Department scraping");
+})
+.then(frozenFishFillet)
+.then(greenBeans)
+.then(mixedVegetables)
+.then(greenPeas)
+.then(concentratedOrangeJuice)
+.then(frozenStrawberries)
+.then(function finishFrozenFood() {
+  console.log("Finishing Frozen Food Department scraping");
+  console.log("Starting Canned and Dry Department scraping");
+})
+.then(blackBeans)
+.then(flakedTuna)
+.then(wildSalmon)
+.then(peachSlices)
+.then(crispCorn)
+.then(dicedTomatoes)
+.then(appleJuice)
+.then(tomatoCocktail)
+.then(cereal)
+.then(oat)
+.then(wholeWheatFlour)
+.then(allPurposeFlour)
+.then(raisins)
+.then(lentils)
+.then(socialTeaBiscuits)
+.then(crackers)
+.then(peanutButter)
+.then(vegetableOil)
+.then(caesarDressing)
+.then(italianDressing)
+.then(spaghetti)
+.then(rice)
+.then(peanuts)
 .then(async () => {
   console.log("SCRAPING COMPLETED SUCCESSFULLY");
   // Close the database connection (if needed)
