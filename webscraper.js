@@ -139,8 +139,8 @@ scrapeCheese()
 .then(scrapeEggs)
 .then(scrapeMargarine)
 .then(function finishRefrigerated() {
-  console.log("Finishing Refrigerated Food scraping");
-  console.log("Starting Meat Department scraping");
+ console.log("Finishing Refrigerated Food scraping");
+ console.log("Starting Meat Department scraping");
 })
 .then(beefStirFry)
 .then(outsideRoundSteak)
@@ -148,8 +148,8 @@ scrapeCheese()
 .then(porkCenterChop)
 .then(blackForestHam)
 .then(function finishMeatDepartment() {
-  console.log("Finishing Meat Department scraping");
-  console.log("Starting Produce Department scraping");
+ console.log("Finishing Meat Department scraping");
+ console.log("Starting Produce Department scraping");
 })
 .then(cantaloupe)
 .then(sweetPotato)
@@ -170,21 +170,21 @@ scrapeCheese()
 .then(onion)
 .then(tomatoes)
 .then(function finishProduceDepartment() {
-  console.log("Finishing Produce Department scraping");
-  console.log("Starting Bakery Department scraping");
+ console.log("Finishing Produce Department scraping");
+ console.log("Starting Bakery Department scraping");
 })
 .then(pitaBread)
 .then(wheatBread)
 .then(originalBread)
 .then(hamburgerBread)
 .then(function finishBakeryDepartment() {
-  console.log("Finishing Bakery Department scraping");
-  console.log("Starting Frozen Food Department scraping");
+ console.log("Finishing Bakery Department scraping");
+ console.log("Starting Frozen Food Department scraping");
 })
 .then(frozenFishFillet)
 .then(greenBeans)
 .then(mixedVegetables)
-.then(greenPeas)
+.then(greenPeas) */
 .then(concentratedOrangeJuice)
 .then(frozenStrawberries)
 .then(function finishFrozenFood() {
@@ -215,36 +215,31 @@ scrapeCheese()
 .then(rice)
 .then(peanuts)
 .then(async () => {
-  console.log("SCRAPING COMPLETED SUCCESSFULLY");
-  // Close the database connection (if needed)
-  // await closeDatabaseConnection();
-  
-  console.log('Starting update process...');
-  await updateTitles();
-  console.log('Update process completed successfully.');
+	console.log("SCRAPING COMPLETED SUCCESSFULLY");
+	  // Close the database connection (if needed)
+	await closeDatabaseConnection();
+ 	console.log('Starting update process...')
+  	await updateTitles();
+	console.log('Update process completed successfully.');
 })
-<<<<<<< HEAD
-.catch(error => {
-  console.error("Error querying collections:", error);
-});
-=======
+	
 .then(() => {
-  console.log('All operations completed. Exiting the application...');
-  // Close any remaining connections and exit
-  // await closeDatabaseConnection(); // if not already closed
-  process.exit(0); // Exit the application with a success status code
-})
-.catch(async (error) => {
-  console.error('An error occurred:', error);
-  // Attempt to close the database connection even if there's an error
-  await closeDatabaseConnection().finally(() => {
-      console.error("Exiting the application due to an error.");
-      process.exit(1); // Exit the application with an error status code
-  });
-});
-}
->>>>>>> 95f1b2097de9b8441ecfe82b83a947b3e0e4cef5
+	console.log('All operations completed. Exiting the application...');
+	 // Close any remaining connections and exit
+	// await closeDatabaseConnection(); // if not already closed
+	process.exit(0); // Exit the application with a success status code
+ })
 
+
+.catch(async (error) => {
+	  console.error('An error occurred:', error);
+	  // Attempt to close the database connection even if there's an error
+	await closeDatabaseConnection().finally(() => {
+	console.error("Exiting the application due to an error.");
+	process.exit(1); // Exit the application with an error status code
+	         });
+	                 });
+                 }
 mainScrapingFunction();
 
 /* Regrigerated Food */
