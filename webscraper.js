@@ -130,116 +130,120 @@ let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
 
-async function mainScrapingFunction(){
+async function mainScrapingFunction() {
 
-scrapeCheese()
-.then(scrapeCheeseBlock)
-.then(mediumCheeseSlices)
-.then(scrapeYogurt)
-.then(scrapeEggs)
-.then(scrapeMargarine)
-.then(function finishRefrigerated() {
- console.log("Finishing Refrigerated Food scraping");
- console.log("Starting Meat Department scraping");
-})
-.then(beefStirFry)
-.then(outsideRoundSteak)
-.then(leanGroundBeef)
-.then(porkCenterChop)
-.then(blackForestHam)
-.then(function finishMeatDepartment() {
- console.log("Finishing Meat Department scraping");
- console.log("Starting Produce Department scraping");
-})
-.then(cantaloupe)
-.then(sweetPotato)
-.then(carrots)
-.then(romaineLettuce)
-.then(broccoliCrown)
-.then(sweetGreenPeppers)
-.then(bananas)
-.then(grapes) 
-.then(pears)
-.then(potatoes)
-.then(turnips)
-.then(cabbage)
-.then(cucumbers)
-.then(celery)
-.then(lettuceIceberg)
-.then(whiteMushrooms)
-.then(onion)
-.then(tomatoes)
-.then(function finishProduceDepartment() {
- console.log("Finishing Produce Department scraping");
- console.log("Starting Bakery Department scraping");
-})
-.then(pitaBread)
-.then(wheatBread)
-.then(originalBread)
-.then(hamburgerBread)
-.then(function finishBakeryDepartment() {
- console.log("Finishing Bakery Department scraping");
- console.log("Starting Frozen Food Department scraping");
-})
-.then(frozenFishFillet)
-.then(greenBeans)
-.then(mixedVegetables)
-.then(greenPeas) */
-.then(concentratedOrangeJuice)
-.then(frozenStrawberries)
-.then(function finishFrozenFood() {
-  console.log("Finishing Frozen Food Department scraping");
-  console.log("Starting Canned and Dry Department scraping");
-})
-.then(blackBeans)
-.then(flakedTuna)
-.then(wildSalmon)
-.then(peachSlices)
-.then(crispCorn)
-.then(dicedTomatoes)
-.then(appleJuice)
-.then(tomatoCocktail)
-.then(cereal)
-.then(oat)
-.then(wholeWheatFlour)
-.then(allPurposeFlour)
-.then(raisins)
-.then(lentils)
-.then(socialTeaBiscuits)
-.then(crackers)
-.then(peanutButter)
-.then(vegetableOil)
-.then(caesarDressing)
-.then(italianDressing)
-.then(spaghetti)
-.then(rice)
-.then(peanuts)
-.then(async () => {
-	console.log("SCRAPING COMPLETED SUCCESSFULLY");
-	  // Close the database connection (if needed)
-	await closeDatabaseConnection();
- 	console.log('Starting update process...')
-  	await updateTitles();
-	console.log('Update process completed successfully.');
-})
-	
-.then(() => {
-	console.log('All operations completed. Exiting the application...');
-	 // Close any remaining connections and exit
-	// await closeDatabaseConnection(); // if not already closed
-	process.exit(0); // Exit the application with a success status code
- })
+  scrapeCheese()
+  .then(scrapeCheeseBlock)
+    .then(mediumCheeseSlices)
+    .then(scrapeYogurt)
+    .then(scrapeEggs)
+    .then(scrapeMargarine)
+    .then(function finishRefrigerated() {
+      console.log("Finishing Refrigerated Food scraping");
+      console.log("Starting Meat Department scraping");
+    })
+    .then(chickenDrumstrick)
+    .then(beefStirFry)
+    .then(outsideRoundSteak)
+    .then(leanGroundBeef)
+    .then(porkCenterChop)
+    .then(blackForestHam)
+    .then(function finishMeatDepartment() {
+      console.log("Finishing Meat Department scraping");
+      console.log("Starting Produce Department scraping");
+    })
+    .then(cantaloupe)
+    .then(sweetPotato)
+    .then(carrots)
+    .then(romaineLettuce)
+    .then(broccoliCrown)
+    .then(sweetGreenPeppers)
+    .then(apples)
+    .then(bananas)
+    .then(grapes)
+    .then(pears)
+    .then(potatoes)
+    .then(turnips)
+    .then(cabbage)
+    .then(cucumbers)
+    .then(celery)
+    .then(lettuceIceberg)
+    .then(whiteMushrooms)
+    .then(onion)
+    .then(tomatoes)
+    .then(function finishProduceDepartment() {
+      console.log("Finishing Produce Department scraping");
+      console.log("Starting Bakery Department scraping");
+    })
+    .then(pitaBread)
+    .then(wheatBread)
+    .then(originalBread)
+    .then(hamburgerBread)
+    .then(function finishBakeryDepartment() {
+      console.log("Finishing Bakery Department scraping");
+      console.log("Starting Frozen Food Department scraping");
+    })
+    .then(frozenFishFillet)
+    .then(greenBeans)
+    .then(mixedVegetables)
+    .then(greenPeas)
+    // .then(concentratedOrangeJuice)
+    .then(frozenStrawberries)
+    .then(function finishFrozenFood() {
+      console.log("Finishing Frozen Food Department scraping");
+      console.log("Starting Canned and Dry Department scraping");
+    })
+    .then(blackBeans)
+    .then(flakedTuna)
+    .then(wildSalmon)
+    .then(peachSlices)
+    .then(crispCorn)
+    .then(dicedTomatoes)
+    .then(appleJuice)
+    .then(tomatoCocktail)
+    .then(cereal)
+    .then(granola)
+    .then(oat)
+    .then(wholeWheatFlour)
+    .then(allPurposeFlour)
+    .then(raisins)
+    .then(lentils)
+    .then(socialTeaBiscuits)
+    .then(crackers)
+    .then(peanutButter)
+    .then(vegetableOil)
+    .then(caesarDressing)
+    .then(italianDressing)
+    .then(spaghetti)
+    .then(rice)
+    .then(peanuts)
+    .then(async () => {
+      console.log("SCRAPING COMPLETED SUCCESSFULLY");
+      // Close the database connection (if needed)
+      // await closeDatabaseConnection();
+
+      console.log('Starting update process...')
+      await updateTitles();
+      console.log('Update process completed successfully.');
+    })
+
+    .then(() => {
+      console.log('All operations completed. Exiting the application...');
+      // Close any remaining connections and exit
+      // await closeDatabaseConnection(); // if not already closed
+      process.exit(0); // Exit the application with a success status code
+    })
 
 
-.catch(async (error) => {
-	  console.error('An error occurred:', error);
-	  // Attempt to close the database connection even if there's an error
-	await closeDatabaseConnection().finally(() => {
-	console.error("Exiting the application due to an error.");
-	process.exit(1); // Exit the application with an error status code
-	         });
-	                 });
-                 }
+    .catch(async (error) => {
+      console.error('An error occurred:', error);
+      // Attempt to close the database connection even if there's an error
+      await closeDatabaseConnection().finally(() => {
+        console.error("Exiting the application due to an error.");
+        process.exit(1); // Exit the application with an error status code
+      });
+    });
+}
 mainScrapingFunction();
 
 /* Regrigerated Food */
@@ -595,12 +599,12 @@ function scrapeEggs() {
         // const pricePer100g = await pricePer100gTxt.jsonValue();
         // const pricePer100gFinal = pricePer100g.slice(1);
 
-        const pricePer100gFinal = (priceFinal * 100)/600;
+        const pricePer100gFinal = (priceFinal * 100) / 600;
 
 
         // pricePerG
 
-        const pricePerG = (pricePer100gFinal/100).toFixed(4);
+        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         // Date
 
@@ -793,6 +797,8 @@ function chickenDrumstrick() {
     }, randomSecond());
   });
 }
+
+
 function beefStirFry() {
   return new Promise(function (resolve, reject) {
     setTimeout(() => {
@@ -809,6 +815,8 @@ function beefStirFry() {
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
         );
+
+
         const titleTxt = await titleElement.getProperty("textContent");
         const title = await titleTxt.jsonValue();
 
@@ -877,7 +885,7 @@ function outsideRoundSteak() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
-        const id = 9; 
+        const id = 9;
 
         // title
         const [titleElement] = await page.$x(
@@ -1008,7 +1016,7 @@ function leanGroundBeef() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/lean-ground-beef/p/21125124_EA")
+        scrapeUrl("https://www.nofrills.ca/lean-ground-beef/p/21604443_EA")
       );
     }, randomSecond());
   });
@@ -1081,7 +1089,7 @@ function porkCenterChop() {
       }
       resolve(
         scrapeUrl(
-          "https://www.nofrills.ca/free-from-boneless-pork-center-chop-tray-pack/p/21095303_KG"
+          "https://www.nofrills.ca/boneless-pork-chop-center-rib-club-pack/p/20353305_KG"
         )
       );
     }, randomSecond());
@@ -1316,7 +1324,7 @@ function carrots() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
-        
+
         const id = 15;
 
         // title
@@ -1459,7 +1467,7 @@ function broccoliCrown() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
-        const id = 17; 
+        const id = 17;
 
         // title
         const [titleElement] = await page.$x(
@@ -1749,7 +1757,7 @@ function grapes() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
-        const id = 21; 
+        const id = 21;
 
         // title
         const [titleElement] = await page.$x(
@@ -1823,7 +1831,7 @@ function orange() {
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
 
-        const id = 22; 
+        const id = 22;
 
         // title
         const [titleElement] = await page.$x(
@@ -1882,7 +1890,7 @@ function orange() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/navel-orange/p/20426078001_KG")
       );
-      
+
     }, randomSecond());
   });
 }
@@ -2690,7 +2698,7 @@ function wheatBread() {
         await page.goto(url, { waitUntil: "networkidle0", timeout: 0 });
         await useProxy(page, proxyServer);
         // const data = await useProxy.lookup(page);
-        
+
         const id = 34;
 
         // title
@@ -3255,7 +3263,7 @@ function concentratedOrangeJuice() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/unsweetened-frozen-concentrated-pulp-free-orange-j/p/20552223001_EA")
+        scrapeUrl("https://www.nofrills.ca/unsweetened-orange-juice-from-concentrate/p/20320979_EA")
       );
     }, randomSecond());
   });
