@@ -1,11 +1,11 @@
-import dotenv from "dotenv"
-dotenv.config()
-import connect from 'mongoose';
+import dotenv from "dotenv";
+dotenv.config();
+import connect from "mongoose";
 import connection from "mongoose";
-import config from "dotenv"
+import config from "dotenv";
 import cheerio from "cheerio";
 import fetch from "node-fetch";
-import express from "express"
+import express from "express";
 // import request from "request";
 // import bodyParser from "body-parser";
 // import axios from 'axios';
@@ -14,7 +14,6 @@ import puppeteer from "puppeteer";
 import mongoose from "mongoose";
 import useProxy from "puppeteer-page-proxy";
 // import { resolveInclude } from "ejs";
-
 
 import { updateTitles } from "./update.js";
 
@@ -62,11 +61,10 @@ const getProxies = async () => {
 };
 const proxyServer = await getProxies();
 
-
 // Database
-const DB_PASSWORD = process.env.DB_PASSWORD
-const DB_USER = process.env.DB_USER
-const DB_ADDRESS = process.env.DB_ADDRESS
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_USER = process.env.DB_USER;
+const DB_ADDRESS = process.env.DB_ADDRESS;
 
 mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_ADDRESS}`);
 
@@ -86,9 +84,7 @@ const refrigeratedFoodSection = mongoose.model(
   "refrigeratedFoodSection",
   webScrapingDBSchema
 );
-const meatDepartment = mongoose.model(
-  "meatDepartment", webScrapingDBSchema)
-  ;
+const meatDepartment = mongoose.model("meatDepartment", webScrapingDBSchema);
 const produceDepartment = mongoose.model(
   "produceDepartment",
   webScrapingDBSchema
@@ -129,87 +125,87 @@ function closeDatabaseConnection() {
 let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
-
 async function mainScrapingFunction() {
+  // scrapeCheese()
+  // .then(scrapeCheeseBlock)
+  //   .then(mediumCheeseSlices)
+  // .then(scrapeYogurt)
+  // .then(scrapeEggs)
+  // .then(scrapeMargarine)
+  // .then(function finishRefrigerated() {
+  //   console.log("Finishing Refrigerated Food scraping");
+  //   console.log("Starting Meat Department scraping");
+  // })
+  // .then(chickenDrumstrick)
 
-  scrapeCheese()
-  .then(scrapeCheeseBlock)
-    .then(mediumCheeseSlices)
-    .then(scrapeYogurt)
-    .then(scrapeEggs)
-    .then(scrapeMargarine)
-    .then(function finishRefrigerated() {
-      console.log("Finishing Refrigerated Food scraping");
-      console.log("Starting Meat Department scraping");
-    })
-    .then(chickenDrumstrick)
-    .then(beefStirFry)
-    .then(outsideRoundSteak)
-    .then(leanGroundBeef)
-    .then(porkCenterChop)
-    .then(blackForestHam)
-    .then(function finishMeatDepartment() {
-      console.log("Finishing Meat Department scraping");
-      console.log("Starting Produce Department scraping");
-    })
-    .then(cantaloupe)
-    .then(sweetPotato)
-    .then(carrots)
-    .then(romaineLettuce)
-    .then(broccoliCrown)
-    .then(sweetGreenPeppers)
-    .then(apples)
-    .then(bananas)
-    .then(grapes)
-    .then(pears)
-    .then(potatoes)
-    .then(turnips)
-    .then(cabbage)
-    .then(cucumbers)
-    .then(celery)
-    .then(lettuceIceberg)
-    .then(whiteMushrooms)
-    .then(onion)
-    .then(tomatoes)
-    .then(function finishProduceDepartment() {
-      console.log("Finishing Produce Department scraping");
-      console.log("Starting Bakery Department scraping");
-    })
-    .then(pitaBread)
-    .then(wheatBread)
-    .then(originalBread)
-    .then(hamburgerBread)
-    .then(function finishBakeryDepartment() {
-      console.log("Finishing Bakery Department scraping");
-      console.log("Starting Frozen Food Department scraping");
-    })
-    .then(frozenFishFillet)
-    .then(greenBeans)
-    .then(mixedVegetables)
-    .then(greenPeas)
-    // .then(concentratedOrangeJuice)
-    .then(frozenStrawberries)
-    .then(function finishFrozenFood() {
-      console.log("Finishing Frozen Food Department scraping");
-      console.log("Starting Canned and Dry Department scraping");
-    })
-    .then(blackBeans)
-    .then(flakedTuna)
-    .then(wildSalmon)
-    .then(peachSlices)
-    .then(crispCorn)
-    .then(dicedTomatoes)
-    .then(appleJuice)
-    .then(tomatoCocktail)
-    .then(cereal)
-    .then(granola)
-    .then(oat)
-    .then(wholeWheatFlour)
-    .then(allPurposeFlour)
-    .then(raisins)
-    .then(lentils)
-    .then(socialTeaBiscuits)
-    .then(crackers)
+  // .then(beefStirFry)
+  // .then(outsideRoundSteak)
+  // .then(leanGroundBeef)
+  // .then(porkCenterChop)
+  // .then(blackForestHam)
+  // .then(function finishMeatDepartment() {
+  //   console.log("Finishing Meat Department scraping");
+  //   console.log("Starting Produce Department scraping");
+  // })
+  // .then(cantaloupe)
+  // .then(sweetPotato)
+  // .then(carrots)
+  // .then(romaineLettuce)
+  // .then(broccoliCrown)
+  // .then(sweetGreenPeppers)
+  // .then(apples)
+  // .then(bananas)
+  // .then(grapes)
+  // .then(pears)
+  // .then(potatoes)
+  // .then(turnips)
+  // .then(cabbage)
+  // .then(cucumbers)
+  // .then(celery)
+  // .then(lettuceIceberg)
+  // .then(whiteMushrooms)
+  // .then(onion)
+  // .then(tomatoes)
+  // .then(function finishProduceDepartment() {
+  //   console.log("Finishing Produce Department scraping");
+  //   console.log("Starting Bakery Department scraping");
+  // })
+  // .then(pitaBread)
+  // .then(wheatBread)
+  // .then(originalBread)
+  // .then(hamburgerBread)
+  // .then(function finishBakeryDepartment() {
+  //   console.log("Finishing Bakery Department scraping");
+  //   console.log("Starting Frozen Food Department scraping");
+  // })
+  // .then(frozenFishFillet)
+  // .then(greenBeans)
+  // .then(mixedVegetables)
+  // .then(greenPeas)
+  // .then(concentratedOrangeJuice)
+  // .then(frozenStrawberries)
+  // .then(function finishFrozenFood() {
+  //   console.log("Finishing Frozen Food Department scraping");
+  //   console.log("Starting Canned and Dry Department scraping");
+  // })
+  // .then(blackBeans)
+  // .then(flakedTuna)
+  // .then(wildSalmon)
+  // .then(peachSlices)
+  // .then(crispCorn)
+  // .then(dicedTomatoes)
+  // .then(appleJuice)
+  // .then(tomatoCocktail)
+  // .then(cereal)
+  // .then(granola)
+  // .then(oat)
+  // .then(wholeWheatFlour)
+  // .then(allPurposeFlour)
+  // .then(raisins)
+  // .then(lentils)
+  // .then(socialTeaBiscuits)
+  // .then(crackers)
+  crackers()
     .then(peanutButter)
     .then(vegetableOil)
     .then(caesarDressing)
@@ -222,21 +218,20 @@ async function mainScrapingFunction() {
       // Close the database connection (if needed)
       // await closeDatabaseConnection();
 
-      console.log('Starting update process...')
+      console.log("Starting update process...");
       await updateTitles();
-      console.log('Update process completed successfully.');
+      console.log("Update process completed successfully.");
     })
 
     .then(() => {
-      console.log('All operations completed. Exiting the application...');
+      console.log("All operations completed. Exiting the application...");
       // Close any remaining connections and exit
       // await closeDatabaseConnection(); // if not already closed
       process.exit(0); // Exit the application with a success status code
     })
 
-
     .catch(async (error) => {
-      console.error('An error occurred:', error);
+      console.error("An error occurred:", error);
       // Attempt to close the database connection even if there's an error
       await closeDatabaseConnection().finally(() => {
         console.error("Exiting the application due to an error.");
@@ -477,7 +472,7 @@ function mediumCheeseSlices() {
       }
       resolve(
         scrapeUrl(
-          "https://www.nofrills.ca/medium-cheddar-cheese-slices/p/20742451_EA"
+          "https://www.nofrills.ca/medium-cheddar-cheese/p/20316127_EA?source=nspt"
         )
       );
     }, randomSecond());
@@ -601,7 +596,6 @@ function scrapeEggs() {
 
         const pricePer100gFinal = (priceFinal * 100) / 600;
 
-
         // pricePerG
 
         const pricePerG = (pricePer100gFinal / 100).toFixed(4);
@@ -638,7 +632,9 @@ function scrapeEggs() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/free-range-large-brown-eggs/p/20813711001_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/free-range-large-brown-eggs/p/20813711001_EA"
+        )
       );
     }, randomSecond());
   });
@@ -792,12 +788,13 @@ function chickenDrumstrick() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/chicken-drumstick/p/20654051_KG")
+        scrapeUrl(
+          "https://www.nofrills.ca/chicken-drumstick/p/20654051_KG?source=nspt"
+        )
       );
     }, randomSecond());
   });
 }
-
 
 function beefStirFry() {
   return new Promise(function (resolve, reject) {
@@ -815,7 +812,6 @@ function beefStirFry() {
         const [titleElement] = await page.$x(
           '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
         );
-
 
         const titleTxt = await titleElement.getProperty("textContent");
         const title = await titleTxt.jsonValue();
@@ -1162,7 +1158,9 @@ function blackForestHam() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/black-forest-ham/p/20817362_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/smoked-black-forest-ham-slices/p/21592461_EA?source=nspt"
+        )
       );
     }, randomSecond());
   });
@@ -1890,7 +1888,6 @@ function orange() {
       resolve(
         scrapeUrl("https://www.nofrills.ca/navel-orange/p/20426078001_KG")
       );
-
     }, randomSecond());
   });
 }
@@ -3263,7 +3260,9 @@ function concentratedOrangeJuice() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/unsweetened-orange-juice-from-concentrate/p/20320979_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/unsweetened-orange-juice-from-concentrate/p/20320979_EA"
+        )
       );
     }, randomSecond());
   });
@@ -3554,7 +3553,9 @@ function wildSalmon() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/sustainably-sourced-wild-pacific-pink-salmon/p/20164488_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/sustainably-sourced-wild-pacific-pink-salmon/p/20164488_EA"
+        )
       );
     }, randomSecond());
   });
@@ -3626,7 +3627,9 @@ function peachSlices() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/clingstone-peach-slices-in-juice-from-concentrate/p/20618824_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/clingstone-peach-slices-in-juice-from-concentrate/p/20618824_EA"
+        )
       );
     }, randomSecond());
   });
@@ -3698,7 +3701,9 @@ function crispCorn() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/whole-kernel-crisp-corn/p/20303822_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/whole-kernel-crisp-corn/p/20303822_EA"
+        )
       );
     }, randomSecond());
   });
@@ -3842,7 +3847,9 @@ function appleJuice() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/apple-juice-from-concentrate/p/20087458_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/apple-juice-from-concentrate/p/20087458_EA"
+        )
       );
     }, randomSecond());
   });
@@ -3914,7 +3921,9 @@ function tomatoCocktail() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/original-tomato-clam-cocktail/p/20506849003_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/original-tomato-clam-cocktail/p/20506849003_EA"
+        )
       );
     }, randomSecond());
   });
@@ -4058,7 +4067,9 @@ function granola() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/harvest-crunch-original-granola-cereal/p/21219824_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/harvest-crunch-original-granola-cereal/p/21219824_EA"
+        )
       );
     }, randomSecond());
   });
@@ -4130,7 +4141,9 @@ function oat() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/quick-100-whole-grain-oats/p/20923828_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/quick-100-whole-grain-oats/p/20923828_EA"
+        )
       );
     }, randomSecond());
   });
@@ -4417,9 +4430,7 @@ function lentils() {
         console.log(`Current scraping time: ${timer}`);
         browser.close();
       }
-      resolve(
-        scrapeUrl("https://www.nofrills.ca/lentils/p/20325921004_EA")
-      );
+      resolve(scrapeUrl("https://www.nofrills.ca/lentils/p/20325921004_EA"));
     }, randomSecond());
   });
 }
@@ -4562,7 +4573,9 @@ function crackers() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/toppables-crackers/p/21449871_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/toppables-crackers/p/21618621_EA?source=nspt"
+        )
       );
     }, randomSecond());
   });
@@ -4634,7 +4647,9 @@ function peanutButter() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/smooth-peanut-butter-club-size/p/20323398002_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/smooth-peanut-butter-club-size/p/20323398002_EA"
+        )
       );
     }, randomSecond());
   });
@@ -4706,7 +4721,9 @@ function vegetableOil() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/100-pure-vegetable-oil/p/20768660_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/100-pure-vegetable-oil/p/20768660_EA"
+        )
       );
     }, randomSecond());
   });
@@ -5066,14 +5083,13 @@ function peanuts() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/salted-blanched-peanuts/p/20058865_EA")
+        scrapeUrl(
+          "https://www.nofrills.ca/salted-blanched-peanuts/p/20058865_EA"
+        )
       );
     }, randomSecond());
   });
 }
 
-
-
 console.log(`Successfully started server on port ${port}.`);
-app.listen(port, () => {
-});
+app.listen(port, () => {});
