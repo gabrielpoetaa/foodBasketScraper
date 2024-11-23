@@ -65,8 +65,18 @@ const proxyServer = await getProxies();
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_USER = process.env.DB_USER;
 const DB_ADDRESS = process.env.DB_ADDRESS;
+const DB_NAME = process.env.DB_NAME; // Nome do banco de dados
 
-mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_ADDRESS}`);
+mongoose
+  .connect(
+    `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_ADDRESS}/${DB_NAME}?retryWrites=true&w=majority`
+  )
+  .then(() => {
+    console.log("Conectado ao banco de dados foodBasket");
+  })
+  .catch((err) => {
+    console.error("Erro ao conectar ao banco de dados:", err);
+  });
 
 // Database schema
 const webScrapingDBSchema = new mongoose.Schema({
@@ -126,86 +136,84 @@ let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
 async function mainScrapingFunction() {
-  // scrapeCheese()
-  // .then(scrapeCheeseBlock)
-  //   .then(mediumCheeseSlices)
-  // .then(scrapeYogurt)
-  // .then(scrapeEggs)
-  // .then(scrapeMargarine)
-  // .then(function finishRefrigerated() {
-  //   console.log("Finishing Refrigerated Food scraping");
-  //   console.log("Starting Meat Department scraping");
-  // })
-  // .then(chickenDrumstrick)
-
-  // .then(beefStirFry)
-  // .then(outsideRoundSteak)
-  // .then(leanGroundBeef)
-  // .then(porkCenterChop)
-  // .then(blackForestHam)
-  // .then(function finishMeatDepartment() {
-  //   console.log("Finishing Meat Department scraping");
-  //   console.log("Starting Produce Department scraping");
-  // })
-  // .then(cantaloupe)
-  // .then(sweetPotato)
-  // .then(carrots)
-  // .then(romaineLettuce)
-  // .then(broccoliCrown)
-  // .then(sweetGreenPeppers)
-  // .then(apples)
-  // .then(bananas)
-  // .then(grapes)
-  // .then(pears)
-  // .then(potatoes)
-  // .then(turnips)
-  // .then(cabbage)
-  // .then(cucumbers)
-  // .then(celery)
-  // .then(lettuceIceberg)
-  // .then(whiteMushrooms)
-  // .then(onion)
-  // .then(tomatoes)
-  // .then(function finishProduceDepartment() {
-  //   console.log("Finishing Produce Department scraping");
-  //   console.log("Starting Bakery Department scraping");
-  // })
-  // .then(pitaBread)
-  // .then(wheatBread)
-  // .then(originalBread)
-  // .then(hamburgerBread)
-  // .then(function finishBakeryDepartment() {
-  //   console.log("Finishing Bakery Department scraping");
-  //   console.log("Starting Frozen Food Department scraping");
-  // })
-  // .then(frozenFishFillet)
-  // .then(greenBeans)
-  // .then(mixedVegetables)
-  // .then(greenPeas)
-  // .then(concentratedOrangeJuice)
-  // .then(frozenStrawberries)
-  // .then(function finishFrozenFood() {
-  //   console.log("Finishing Frozen Food Department scraping");
-  //   console.log("Starting Canned and Dry Department scraping");
-  // })
-  // .then(blackBeans)
-  // .then(flakedTuna)
-  // .then(wildSalmon)
-  // .then(peachSlices)
-  // .then(crispCorn)
-  // .then(dicedTomatoes)
-  // .then(appleJuice)
-  // .then(tomatoCocktail)
-  // .then(cereal)
-  // .then(granola)
-  // .then(oat)
-  // .then(wholeWheatFlour)
-  // .then(allPurposeFlour)
-  // .then(raisins)
-  // .then(lentils)
-  // .then(socialTeaBiscuits)
-  // .then(crackers)
-  crackers()
+  scrapeCheese()
+    .then(scrapeCheeseBlock)
+    .then(mediumCheeseSlices)
+    .then(scrapeYogurt)
+    .then(scrapeEggs)
+    .then(scrapeMargarine)
+    .then(function finishRefrigerated() {
+      console.log("Finishing Refrigerated Food scraping");
+      console.log("Starting Meat Department scraping");
+    })
+    // .then(chickenDrumstrick)
+    .then(beefStirFry)
+    .then(outsideRoundSteak)
+    .then(leanGroundBeef)
+    .then(porkCenterChop)
+    .then(blackForestHam)
+    .then(function finishMeatDepartment() {
+      console.log("Finishing Meat Department scraping");
+      console.log("Starting Produce Department scraping");
+    })
+    .then(cantaloupe)
+    .then(sweetPotato)
+    .then(carrots)
+    .then(romaineLettuce)
+    .then(broccoliCrown)
+    .then(sweetGreenPeppers)
+    .then(apples)
+    .then(bananas)
+    .then(grapes)
+    .then(pears)
+    .then(potatoes)
+    .then(turnips)
+    .then(cabbage)
+    .then(cucumbers)
+    .then(celery)
+    .then(lettuceIceberg)
+    .then(whiteMushrooms)
+    .then(onion)
+    .then(tomatoes)
+    .then(function finishProduceDepartment() {
+      console.log("Finishing Produce Department scraping");
+      console.log("Starting Bakery Department scraping");
+    })
+    .then(pitaBread)
+    .then(wheatBread)
+    .then(originalBread)
+    .then(hamburgerBread)
+    .then(function finishBakeryDepartment() {
+      console.log("Finishing Bakery Department scraping");
+      console.log("Starting Frozen Food Department scraping");
+    })
+    .then(frozenFishFillet)
+    .then(greenBeans)
+    .then(mixedVegetables)
+    .then(greenPeas)
+    .then(concentratedOrangeJuice)
+    .then(frozenStrawberries)
+    .then(function finishFrozenFood() {
+      console.log("Finishing Frozen Food Department scraping");
+      console.log("Starting Canned and Dry Department scraping");
+    })
+    .then(blackBeans)
+    .then(flakedTuna)
+    .then(wildSalmon)
+    .then(peachSlices)
+    .then(crispCorn)
+    .then(dicedTomatoes)
+    .then(appleJuice)
+    .then(tomatoCocktail)
+    .then(cereal)
+    .then(granola)
+    .then(oat)
+    .then(wholeWheatFlour)
+    .then(allPurposeFlour)
+    .then(raisins)
+    .then(lentils)
+    .then(socialTeaBiscuits)
+    .then(crackers)
     .then(peanutButter)
     .then(vegetableOil)
     .then(caesarDressing)
