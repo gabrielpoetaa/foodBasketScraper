@@ -65,7 +65,7 @@ const proxyServer = await getProxies();
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_USER = process.env.DB_USER;
 const DB_ADDRESS = process.env.DB_ADDRESS;
-const DB_NAME = process.env.DB_NAME; // Nome do banco de dados
+const DB_NAME = process.env.DB_NAME;
 
 mongoose
   .connect(
@@ -142,11 +142,12 @@ async function mainScrapingFunction() {
     .then(scrapeYogurt)
     .then(scrapeEggs)
     .then(scrapeMargarine)
+
     .then(function finishRefrigerated() {
       console.log("Finishing Refrigerated Food scraping");
       console.log("Starting Meat Department scraping");
     })
-    // .then(chickenDrumstrick)
+    .then(chickenDrumstrick)
     .then(beefStirFry)
     .then(outsideRoundSteak)
     .then(leanGroundBeef)
@@ -249,7 +250,43 @@ async function mainScrapingFunction() {
 }
 mainScrapingFunction();
 
-/* Regrigerated Food */
+async function getValidXPath(page, xPathList) {
+  for (const xPath of xPathList) {
+    const [element] = await page.$x(xPath);
+    if (element) {
+      const text = await element.getProperty("textContent");
+      return (await text.jsonValue()).trim();
+    }
+  }
+  return null; // Caso nenhum XPath funcione
+}
+
+const titleXPaths = [
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[2]/h1',
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[1]/h1',
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div[1]/div/div[1]/h1',
+];
+
+// const titleElementXPathTwo =
+//   '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[1]/h1';
+
+const priceXPaths = [
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[3]/div/div[1]/div/div/div/span/span[1]',
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]',
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div[1]/div[1]/div/div/span/span[1]',
+];
+
+// const priceElementXPathTwo =
+//   '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]';
+
+const pricePer100gXPaths = [
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[3]/div/div[1]/div/ul/li/span/span[1]',
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]',
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div[1]/div[1]/ul/li[1]/span/span[1]',
+];
+
+const pricePer100gElementXPathTwo =
+  '//*[@id="site-content"]/div/div/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]';
 
 function scrapeCheese() {
   return new Promise(function (resolve, reject) {
@@ -264,32 +301,15 @@ function scrapeCheese() {
         // id
         const id = 1;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = pricePer100g.slice(1);
-
-        // pricePerG
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new refrigeratedFoodSection({
@@ -338,33 +358,15 @@ function scrapeCheeseBlock() {
 
         const id = 2;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = pricePer100g.slice(1);
-
-        // pricePerG
-
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         // Date
@@ -418,33 +420,15 @@ function mediumCheeseSlices() {
 
         const id = 3;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = pricePer100g.slice(1);
-
-        // pricePerG
-
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         // Date
@@ -498,33 +482,15 @@ function scrapeYogurt() {
 
         const id = 4;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = pricePer100g.slice(1);
-
-        // pricePerG
-
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         // Date
@@ -578,16 +544,12 @@ function scrapeEggs() {
         const id = 5;
 
         // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
+        const [titleElement] = await page.$x(titleElementXPathTwo);
         const titleTxt = await titleElement.getProperty("textContent");
         const title = await titleTxt.jsonValue();
 
         // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
+        const [priceElement] = await page.$x(priceElementXPathTwo);
         const priceTxt = await priceElement.getProperty("textContent");
         const price = await priceTxt.jsonValue();
         const priceFinal = price.slice(1);
@@ -660,23 +622,19 @@ function scrapeMargarine() {
         const id = 6;
 
         // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
+        const [titleElement] = await page.$x(titleElementXPathTwo);
         const titleTxt = await titleElement.getProperty("textContent");
         const title = await titleTxt.jsonValue();
 
         // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
+        const [priceElement] = await page.$x(priceElementXPathTwo);
         const priceTxt = await priceElement.getProperty("textContent");
         const price = await priceTxt.jsonValue();
         const priceFinal = price.slice(1);
 
         // pricePer100g
         const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
+          pricePer100gElementXPathTwo
         );
         const pricePer100gTxt = await pricePer100gElement.getProperty(
           "textContent"
@@ -741,32 +699,15 @@ function chickenDrumstrick() {
 
         const id = 7;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
         const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
-
-        // pricePerG
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -817,25 +758,19 @@ function beefStirFry() {
         const id = 8;
 
         // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
+        const [titleElement] = await page.$x(titleElementXPath);
 
         const titleTxt = await titleElement.getProperty("textContent");
         const title = await titleTxt.jsonValue();
 
         // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
+        const [priceElement] = await page.$x(priceElementXPath);
         const priceTxt = await priceElement.getProperty("textContent");
         const price = await priceTxt.jsonValue();
         const priceFinal = price.slice(1);
 
         // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
+        const [pricePer100gElement] = await page.$x(pricePer100gElementXPath);
         const pricePer100gTxt = await pricePer100gElement.getProperty(
           "textContent"
         );
@@ -891,32 +826,16 @@ function outsideRoundSteak() {
 
         const id = 9;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title =
+          (await getValidXPath(page, titleXPaths)) || "Título não encontrado";
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
         const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
-
-        // pricePerG
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -965,32 +884,16 @@ function leanGroundBeef() {
 
         const id = 10;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title =
+          (await getValidXPath(page, titleXPaths)) || "Título não encontrado";
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = pricePer100g.slice(1);
-
-        // pricePerG
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -1037,32 +940,16 @@ function porkCenterChop() {
 
         const id = 11;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title =
+          (await getValidXPath(page, titleXPaths)) || "Título não encontrado";
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
         const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
-
-        // pricePerG
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -1111,32 +998,16 @@ function blackForestHam() {
 
         const id = 12;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title =
+          (await getValidXPath(page, titleXPaths)) || "Título não encontrado";
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
         const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
-
-        // pricePerG
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -1188,36 +1059,16 @@ function cantaloupe() {
 
         const id = 13;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (
-          (pricePer100g.slice(1) * 100) /
-          1360
-        ).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1261,32 +1112,15 @@ function sweetPotato() {
 
         const id = 14;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = pricePer100g.slice(1);
-
-        // pricePerG
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -1333,33 +1167,16 @@ function carrots() {
 
         const id = 15;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
         const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1403,33 +1220,16 @@ function romaineLettuce() {
 
         const id = 16;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1475,33 +1275,16 @@ function broccoliCrown() {
 
         const id = 17;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1547,33 +1330,16 @@ function sweetGreenPeppers() {
 
         const id = 18;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1621,33 +1387,16 @@ function apples() {
 
         const id = 19;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1693,33 +1442,16 @@ function bananas() {
 
         const id = 20;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1765,33 +1497,16 @@ function grapes() {
 
         const id = 21;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1839,33 +1554,16 @@ function orange() {
 
         const id = 22;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1911,33 +1609,16 @@ function pears() {
 
         const id = 23;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -1983,33 +1664,16 @@ function potatoes() {
 
         const id = 24;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2055,33 +1719,16 @@ function turnips() {
 
         const id = 25;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2125,33 +1772,16 @@ function cabbage() {
 
         const id = 26;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2197,33 +1827,16 @@ function cucumbers() {
 
         const id = 27;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2269,33 +1882,16 @@ function celery() {
 
         const id = 28;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2341,33 +1937,16 @@ function lettuceIceberg() {
 
         const id = 29;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2413,33 +1992,16 @@ function whiteMushrooms() {
 
         const id = 30;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2485,33 +2047,16 @@ function onion() {
 
         const id = 31;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2557,33 +2102,16 @@ function tomatoes() {
 
         const id = 32;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 0.1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
           id: id,
@@ -2632,33 +2160,16 @@ function pitaBread() {
 
         const id = 33;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
           id: id,
@@ -2706,33 +2217,16 @@ function wheatBread() {
 
         const id = 34;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
           id: id,
@@ -2778,33 +2272,16 @@ function originalBread() {
 
         const id = 35;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
           id: id,
@@ -2850,33 +2327,16 @@ function hamburgerBread() {
 
         const id = 36;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
           id: id,
@@ -2925,33 +2385,16 @@ function frozenFishFillet() {
 
         const id = 37;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
           id: id,
@@ -2997,33 +2440,16 @@ function greenBeans() {
 
         const id = 38;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
           id: id,
@@ -3069,33 +2495,16 @@ function mixedVegetables() {
 
         const id = 39;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
           id: id,
@@ -3141,33 +2550,16 @@ function greenPeas() {
 
         const id = 40;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
           id: id,
@@ -3213,34 +2605,16 @@ function concentratedOrangeJuice() {
 
         const id = 41;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
-
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
         const listing = await new frozenFoodDepartment({
           id: id,
           title: title,
@@ -3287,33 +2661,16 @@ function frozenStrawberries() {
 
         const id = 42;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
           id: id,
@@ -3362,33 +2719,16 @@ function blackBeans() {
 
         const id = 43;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3434,33 +2774,16 @@ function flakedTuna() {
 
         const id = 44;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3506,33 +2829,16 @@ function wildSalmon() {
 
         const id = 45;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3580,33 +2886,16 @@ function peachSlices() {
 
         const id = 46;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3654,33 +2943,16 @@ function crispCorn() {
 
         const id = 47;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3728,33 +3000,16 @@ function dicedTomatoes() {
 
         const id = 48;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3800,33 +3055,16 @@ function appleJuice() {
 
         const id = 49;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3874,33 +3112,16 @@ function tomatoCocktail() {
 
         const id = 50;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3948,33 +3169,16 @@ function cereal() {
 
         const id = 51;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4020,33 +3224,16 @@ function granola() {
 
         const id = 52;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4094,33 +3281,16 @@ function oat() {
 
         const id = 53;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4168,33 +3338,16 @@ function wholeWheatFlour() {
 
         const id = 54;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4240,33 +3393,16 @@ function allPurposeFlour() {
 
         const id = 55;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4312,33 +3448,16 @@ function raisins() {
 
         const id = 56;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4384,33 +3503,16 @@ function lentils() {
 
         const id = 57;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4454,33 +3556,16 @@ function socialTeaBiscuits() {
 
         const id = 58;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4526,33 +3611,16 @@ function crackers() {
 
         const id = 59;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4600,33 +3668,16 @@ function peanutButter() {
 
         const id = 60;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4674,33 +3725,16 @@ function vegetableOil() {
 
         const id = 61;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4748,34 +3782,16 @@ function caesarDressing() {
 
         const id = 62;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
-
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
         const listing = await new cannedAndDryDepartment({
           id: id,
           title: title,
@@ -4820,33 +3836,16 @@ function italianDressing() {
 
         const id = 63;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4892,33 +3891,16 @@ function spaghetti() {
 
         const id = 64;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -4964,33 +3946,16 @@ function rice() {
 
         const id = 65;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -5036,33 +4001,16 @@ function peanuts() {
 
         const id = 66;
 
-        // title
-        const [titleElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[1]/h1'
-        );
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div/div/span/span[1]'
-        );
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          '//*[@id="site-content"]/div/div/div[2]/div[2]/div[2]/div/div/div[2]/div/div[1]/div/ul/li/span/span[1]'
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = (pricePer100g.slice(1) * 1).toFixed(4);
-
-        // pricePerG
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
           id: id,
