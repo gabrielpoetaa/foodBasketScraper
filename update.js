@@ -34,6 +34,7 @@ async function updateDocument(db) {
   const refrigeratedfoodsections = db.collection("refrigeratedfoodsections");
   const producedepartmens = db.collection("producedepartments");
   const meatdepartments = db.collection("meatdepartments");
+  const frozenfooddepartment = db.collection("frozenfooddepartments");
 
   //CANNED AND DRY DEPARTMENT
   try {
@@ -47,7 +48,13 @@ async function updateDocument(db) {
     );
 
     const crackers = await cannedanddrycollection.updateMany(
-      { title: "Toppables Crackers" },
+      { title: {
+          $in: [
+          "Toppables Crackers",
+          "Toppables Crackers, Eat on its own or topped, Buttery tasting, flaky, melt in your mouth crackers",
+          ],
+        } 
+      },
       { $set: { title: "Crackers" } }
     );
 
@@ -69,6 +76,31 @@ async function updateDocument(db) {
     const appleJuice = await cannedanddrycollection.updateMany(
       { title: "Apple Juice from Concentrate" },
       { $set: { title: "Apple Juice" } }
+    );
+
+    const tomatoCocktail = await cannedanddrycollection.updateMany(
+      { title: "Original Tomato Clam Cocktail" },
+      { $set: { title: "Tomato Cocktail" } }
+    );
+    
+    const peanuts = await cannedanddrycollection.updateMany(
+      { title: "Salted Blanched Peanuts Club Size" },
+      { $set: { title: "Peanuts" } }
+    );
+    
+    const peanutButter = await cannedanddrycollection.updateMany(
+      { title: "Smooth Peanut Butter, Club Size" },
+      { $set: { title: "Peanut Butter" } }
+    );
+
+    const spaghetti = await cannedanddrycollection.updateMany(
+      { title: "Spaghetti Pasta" },
+      { $set: { title: "Spaghetti" } }
+    );
+
+    const raisins = await cannedanddrycollection.updateMany(
+      { title: "Sultana Raisins" },
+      { $set: { title: "Raisins" } }
     );
 
     // const query = { title: "Toppables Crackers" };
@@ -94,11 +126,22 @@ async function updateDocument(db) {
         and modified ${peachSlices.modifiedCount} document(s)`);
     } else if (`${appleJuice.matchedCount}` > 0) {
       console.log(`Matched ${appleJuice.matchedCount} document(s) from CANNED AND DRY collection
-        and modified ${appleJuice.modifiedCount} document(s)`);
-      // } else if (`${result.deletedCount}` > 0) {
-      //   console.log(
-      //     `${result.deletedCount} document(s) from CANNED AND DRY collection removed`
-      //   );
+        and modified ${appleJuice.modifiedCount} document(s)`);    
+    } else if (`${tomatoCocktail.matchedCount}` > 0) {
+      console.log(`Matched ${tomatoCocktail.matchedCount} document(s) from CANNED AND DRY collection
+        and modified ${tomatoCocktail.modifiedCount} document(s)`);   
+    } else if (`${peanuts.matchedCount}` > 0) {
+      console.log(`Matched ${peanuts.matchedCount} document(s) from CANNED AND DRY collection
+        and modified ${peanuts.modifiedCount} document(s)`);   
+    } else if (`${peanutButter.matchedCount}` > 0) {
+      console.log(`Matched ${peanutButter.matchedCount} document(s) from CANNED AND DRY collection
+        and modified ${peanutButter.modifiedCount} document(s)`);   
+    } else if (`${spaghetti.matchedCount}` > 0) {
+      console.log(`Matched ${spaghetti.matchedCount} document(s) from CANNED AND DRY collection
+        and modified ${spaghetti.modifiedCount} document(s)`);   
+    } else if (`${raisins.matchedCount}` > 0) {
+      console.log(`Matched ${raisins.matchedCount} document(s) from CANNED AND DRY collection
+        and modified ${raisins.modifiedCount} document(s)`);   
     } else {
       console.log("No documents from Canned and Dry department were updated");
     }
@@ -114,7 +157,14 @@ async function updateDocument(db) {
     );
 
     const tortillas = await bakerycollection.updateMany(
-      { title: "Wrap Me White Flour Tortillas Large " },
+      { title: {
+          $in: [
+          "Wrap Me White Flour Tortillas Large",
+          "Wrap Me White Flour Tortillas Large ",
+          "White Large Wraps 10pk",
+          ],
+        } 
+      },
       { $set: { title: "Tortillas" } }
     );
 
@@ -229,6 +279,16 @@ async function updateDocument(db) {
       { $set: { title: "Pear" } }
     );
 
+    const cucumber = await producedepartmens.updateMany(
+      { title: "Field Cucumbers" },
+      { $set: { title: "Cucumbers" } }
+    );
+
+    const sweetGreenPeppers = await producedepartmens.updateMany(
+      { title: "Sweet Green Peppers" },
+      { $set: { title: "Green Peppers, Sweet" } }
+    );
+
     if (`${grapes.matchedCount}` > 0) {
       console.log(`Matched ${grapes.matchedCount} document(s) from PRODUCE collection
      and modified ${grapes.modifiedCount} document(s)`);
@@ -244,6 +304,12 @@ async function updateDocument(db) {
     } else if (`${pears.matchedCount}` > 0) {
       console.log(`Matched ${pears.matchedCount} document(s) from PRODUCE collection
      and modified ${pears.modifiedCount} document(s)`);
+    } else if (`${cucumber.matchedCount}` > 0) {
+      console.log(`Matched ${cucumber.matchedCount} document(s) from PRODUCE collection
+     and modified ${cucumber.modifiedCount} document(s)`);
+    } else if (`${sweetGreenPeppers.matchedCount}` > 0) {
+      console.log(`Matched ${sweetGreenPeppers.matchedCount} document(s) from PRODUCE collection
+     and modified ${sweetGreenPeppers.modifiedCount} document(s)`);
     } else {
       console.log("No documents were from Produce department updated");
     }
@@ -252,13 +318,33 @@ async function updateDocument(db) {
   }
 
   // MEAT DEPARTMENT
-
   try {
-    const query = { title: "Chicken Drumstick" };
-    const chicken = await meatdepartments.deleteMany(query);
-    if (`${chicken.matchedCount}` > 0) {
-      console.log(`Matched ${chicken.matchedCount} document(s) from MEAT collection
-     and modified ${chicken.modifiedCount} document(s)`);
+    const blackForestHam = await meatdepartments.updateMany(
+      { title: "Smoked Black Forest Ham Slices" },
+      { $set: { title: "Ham (Black Forest)" } }
+    );
+    if (`${blackForestHam.matchedCount}` > 0) {
+      console.log(`Matched ${blackForestHam.matchedCount} document(s) from PRODUCE collection
+     and modified ${blackForestHam.modifiedCount} document(s)`);
+    } else {
+      console.log("No documents were from Produce department updated");
+    }
+  } catch (error) {
+    console.error("Error updating document:", error);
+  }
+
+  // FROZEN FOOD DEPARTMENT
+  try {
+    const greenBeans = await frozenfooddepartment.updateMany(
+      { title: "Cut Green Beans" },
+      { $set: { title: "Green Beans" } }
+    );
+
+    if (`${greenBeans.matchedCount}` > 0) {
+      console.log(`Matched ${greenBeans.matchedCount} document(s) from CANNED AND DRY collection
+      and modified ${greenBeans.modifiedCount} document(s)`);
+    } else {
+      console.log("No documents from Canned and Dry department were updated");
     }
   } catch (error) {
     console.error("Error updating document:", error);

@@ -136,13 +136,13 @@ let proxy = `http://${ipAdresses[randomNumber]}:${portNumbers[randomNumber]}`;
 console.log(proxy);
 
 async function mainScrapingFunction() {
+  console.log("Start Refrigerated Food Section")
   scrapeCheese()
-    .then(scrapeCheeseBlock)
-    .then(mediumCheeseSlices)
-    .then(scrapeYogurt)
-    .then(scrapeEggs)
-    .then(scrapeMargarine)
-
+  .then(scrapeCheeseBlock)
+  .then(mediumCheeseSlices)
+  .then(scrapeYogurt)
+  .then(scrapeEggs)
+  .then(scrapeMargarine)
     .then(function finishRefrigerated() {
       console.log("Finishing Refrigerated Food scraping");
       console.log("Starting Meat Department scraping");
@@ -309,7 +309,7 @@ function scrapeCheese() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new refrigeratedFoodSection({
@@ -366,7 +366,7 @@ function scrapeCheeseBlock() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         // Date
@@ -428,7 +428,7 @@ function mediumCheeseSlices() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         // Date
@@ -490,7 +490,7 @@ function scrapeYogurt() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         // Date
@@ -543,16 +543,16 @@ function scrapeEggs() {
 
         const id = 5;
 
-        // title
-        const [titleElement] = await page.$x(titleElementXPathTwo);
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(priceElementXPathTwo);
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
+        const pricePer100gFinal = pricePer100g.slice(1);
+        const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         // pricePer100g
         // const [pricePer100gElement] = await page.$x(
@@ -564,11 +564,11 @@ function scrapeEggs() {
         // const pricePer100g = await pricePer100gTxt.jsonValue();
         // const pricePer100gFinal = pricePer100g.slice(1);
 
-        const pricePer100gFinal = (priceFinal * 100) / 600;
+        // const pricePer100gFinal = (priceFinal * 100) / 600;
 
         // pricePerG
 
-        const pricePerG = (pricePer100gFinal / 100).toFixed(4);
+        // const pricePerG = (pricePer100gFinal / 100).toFixed(4);
 
         // Date
 
@@ -621,31 +621,16 @@ function scrapeMargarine() {
 
         const id = 6;
 
-        // title
-        const [titleElement] = await page.$x(titleElementXPathTwo);
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        // price
-        const [priceElement] = await page.$x(priceElementXPathTwo);
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(
-          pricePer100gElementXPathTwo
-        );
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
         const pricePer100gFinal = pricePer100g.slice(1);
-
-        // pricePerG
-
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
-
         // Date
 
         // URL
@@ -707,7 +692,7 @@ function chickenDrumstrick() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -757,27 +742,15 @@ function beefStirFry() {
 
         const id = 8;
 
-        // title
-        const [titleElement] = await page.$x(titleElementXPath);
+        // Buscar primeiro XPath válido
+        const title = await getValidXPath(page, titleXPaths);
+        const price = (await getValidXPath(page, priceXPaths)) || "$0";
+        const pricePer100g =
+          (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
-        const titleTxt = await titleElement.getProperty("textContent");
-        const title = await titleTxt.jsonValue();
-
-        // price
-        const [priceElement] = await page.$x(priceElementXPath);
-        const priceTxt = await priceElement.getProperty("textContent");
-        const price = await priceTxt.jsonValue();
+        // Processamento dos valores
         const priceFinal = price.slice(1);
-
-        // pricePer100g
-        const [pricePer100gElement] = await page.$x(pricePer100gElementXPath);
-        const pricePer100gTxt = await pricePer100gElement.getProperty(
-          "textContent"
-        );
-        const pricePer100g = await pricePer100gTxt.jsonValue();
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
-
-        // pricePerG
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -827,15 +800,14 @@ function outsideRoundSteak() {
         const id = 9;
 
         // Buscar primeiro XPath válido
-        const title =
-          (await getValidXPath(page, titleXPaths)) || "Título não encontrado";
+        const title = await getValidXPath(page, titleXPaths);
         const price = (await getValidXPath(page, priceXPaths)) || "$0";
         const pricePer100g =
           (await getValidXPath(page, pricePer100gXPaths)) || "$0";
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -893,7 +865,7 @@ function leanGroundBeef() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -949,7 +921,7 @@ function porkCenterChop() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -1007,7 +979,7 @@ function blackForestHam() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new meatDepartment({
@@ -1067,7 +1039,7 @@ function cantaloupe() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -1120,7 +1092,7 @@ function sweetPotato() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -1228,7 +1200,7 @@ function romaineLettuce() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = priceFinal / 6;
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -1283,7 +1255,7 @@ function broccoliCrown() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -1450,7 +1422,7 @@ function bananas() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -1562,7 +1534,7 @@ function orange() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -1617,7 +1589,7 @@ function pears() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -1865,7 +1837,7 @@ function cucumbers() {
         browser.close();
       }
       resolve(
-        scrapeUrl("https://www.nofrills.ca/field-cucumbers/p/20027651001_EA")
+        scrapeUrl("https://www.nofrills.ca/en/english-cucumber/p/20070132001_EA?")
       );
     }, randomSecond());
   });
@@ -1945,7 +1917,7 @@ function lettuceIceberg() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = priceFinal / 6;
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -2000,7 +1972,7 @@ function whiteMushrooms() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -2110,7 +2082,7 @@ function tomatoes() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new produceDepartment({
@@ -2168,7 +2140,7 @@ function pitaBread() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
@@ -2225,7 +2197,7 @@ function wheatBread() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
@@ -2280,7 +2252,7 @@ function originalBread() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
@@ -2335,7 +2307,7 @@ function hamburgerBread() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new bakeryDepartment({
@@ -2393,7 +2365,7 @@ function frozenFishFillet() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
@@ -2448,7 +2420,7 @@ function greenBeans() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
@@ -2503,7 +2475,7 @@ function mixedVegetables() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
@@ -2558,7 +2530,7 @@ function greenPeas() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
@@ -2613,7 +2585,7 @@ function concentratedOrangeJuice() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
         const listing = await new frozenFoodDepartment({
           id: id,
@@ -2669,7 +2641,7 @@ function frozenStrawberries() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new frozenFoodDepartment({
@@ -2727,7 +2699,7 @@ function blackBeans() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -2782,7 +2754,7 @@ function flakedTuna() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -2837,7 +2809,7 @@ function wildSalmon() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -2894,7 +2866,7 @@ function peachSlices() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -2951,7 +2923,7 @@ function crispCorn() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3063,7 +3035,7 @@ function appleJuice() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3120,7 +3092,7 @@ function tomatoCocktail() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3177,7 +3149,7 @@ function cereal() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3232,7 +3204,7 @@ function granola() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3289,7 +3261,7 @@ function oat() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3346,7 +3318,7 @@ function wholeWheatFlour() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3401,7 +3373,7 @@ function allPurposeFlour() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3456,7 +3428,7 @@ function raisins() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3511,7 +3483,7 @@ function lentils() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3564,7 +3536,7 @@ function socialTeaBiscuits() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3619,7 +3591,7 @@ function crackers() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3676,7 +3648,7 @@ function peanutButter() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3733,7 +3705,7 @@ function vegetableOil() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3790,7 +3762,7 @@ function caesarDressing() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
         const listing = await new cannedAndDryDepartment({
           id: id,
@@ -3844,7 +3816,7 @@ function italianDressing() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3899,7 +3871,7 @@ function spaghetti() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -3954,7 +3926,7 @@ function rice() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
@@ -4009,7 +3981,7 @@ function peanuts() {
 
         // Processamento dos valores
         const priceFinal = price.slice(1);
-        const pricePer100gFinal = pricePer100g.slice(1) * 0.1;
+        const pricePer100gFinal = pricePer100g.slice(1);
         const pricePerG = (pricePer100g.slice(1) / 100).toFixed(4);
 
         const listing = await new cannedAndDryDepartment({
